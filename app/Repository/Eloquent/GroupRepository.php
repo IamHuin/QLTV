@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Reposiroty\Eloquent;
+namespace App\Repository\Eloquent;
 
 use App\Models\Group;
 use App\Models\UserGroup;
-use App\Reposiroty\Contract\GroupRepositoryInterface;
+use App\Repository\Contract\GroupRepositoryInterface;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
 class GroupRepository implements GroupRepositoryInterface

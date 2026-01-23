@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Reposiroty\Eloquent;
+namespace App\Repository\Eloquent;
 
 use App\Models\Permission;
-use App\Reposiroty\Contract\PermissionRepositoryInterface;
+use App\Repository\Contract\PermissionRepositoryInterface;
 
 class PermissionRepository implements PermissionRepositoryInterface
 {

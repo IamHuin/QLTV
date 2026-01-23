@@ -3,7 +3,7 @@
 namespace App\Service;
 
 use App\Models\Post;
-use App\Reposiroty\Contract\PostRepositoryInterface;
+use App\Repository\Contract\PostRepositoryInterface;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 use Stichoza\GoogleTranslate\GoogleTranslate;
 

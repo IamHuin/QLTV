@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Reposiroty\Eloquent;
+namespace App\Repository\Eloquent;
 
 use App\Models\Profile;
-use App\Reposiroty\Contract\ProfileRepositoryInterface;
+use App\Repository\Contract\ProfileRepositoryInterface;
 
 class ProfileRepository implements ProfileRepositoryInterface
 {

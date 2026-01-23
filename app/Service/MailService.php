@@ -4,7 +4,7 @@ namespace App\Service;
 
 use App\Jobs\SendMailJob;
 use App\Mail\SendMail;
-use App\Reposiroty\Contract\UserRepositoryInterface;
+use App\Repository\Contract\UserRepositoryInterface;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
