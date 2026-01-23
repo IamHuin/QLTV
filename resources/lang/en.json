@@ -1,0 +1,22 @@
+{
+    "Register successfully": "Register successfully",
+    "Register unsuccessfully": "Register unsuccessfully",
+    "Login successfully": "Login successfully",
+    "Login unsuccessfully": "Login unsuccessfully",
+    "Update successfully": "Update successfully",
+    "Update unsuccessfully": "Update unsuccessfully",
+    "Delete successfully": "Delete successfully",
+    "Delete unsuccessfully": "Delete unsuccessfully",
+    "Show successfully": "Show successfully",
+    "Show unsuccessfully": "Show unsuccessfully",
+    "Unauthorized": "You do not have permission",
+    "Store successfully": "Store successfully",
+    "Joined Successfully": "Joined Successfully",
+    "Field is required.": "Field is required.",
+    "Must be at least 3 characters.": "Must be at least 3 characters.",
+    "May not be greater than 30 characters.": "May not be greater than 30 characters.",
+    "Must be unique.": "Must be unique.",
+    "Format is invalid.": "Format is invalid.",
+    "Mail successfully sent": "Mail successfully sent",
+    "Mail unsuccessfully sent": "Mail unsuccessfully sent"
+}

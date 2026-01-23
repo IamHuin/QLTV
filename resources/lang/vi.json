@@ -1,0 +1,22 @@
+{
+    "Register successfully": "Đăng ký thành công",
+    "Register unsuccessfully": "Đăng ký không thành công",
+    "Login successfully": "Đăng nhập thành công",
+    "Login unsuccessfully": "Đăng nhập không thành công",
+    "Update successfully": "Cập nhập thành công",
+    "Update unsuccessfully": "Cập nhập không thành công",
+    "Delete successfully": "Xóa thành công",
+    "Delete unsuccessfully": "Xóa không thành công",
+    "Show successfully": "Hiển  thành công",
+    "Show unsuccessfully": "Hiển thị không thành công",
+    "Unauthorized": "Bạn không có quyền truy cập",
+    "Store successfully": "Tạo mới thành công",
+    "Joined Successfully": "Tham gia thành công",
+    "Field is required.": "Trường này bắt buộc.",
+    "Must be at least 3 characters.": "Phải có ít nhất 3 ký tự.",
+    "May not be greater than 30 characters.": "Không được dài quá 30 ký tự.",
+    "Must be unique.": "Phải là duy nhất.",
+    "Format is invalid.": "Định dạng không hợp lệ",
+    "Mail successfully sent": "Gửi Mail thành công",
+    "Mail unsuccessfully sent": "Gửi Mail không thành công"
+}
