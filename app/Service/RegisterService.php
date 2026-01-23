@@ -2,7 +2,7 @@
 
 namespace App\Service;
 
-use App\Reposiroty\Contract\AuthRepositoryInterface;
+use App\Repository\Contract\AuthRepositoryInterface;
 
 class RegisterService
 {
