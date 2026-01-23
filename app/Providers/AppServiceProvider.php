@@ -2,18 +2,18 @@
 
 namespace App\Providers;
 
-use App\Reposiroty\Contract\AuthRepositoryInterface;
-use App\Reposiroty\Contract\GroupRepositoryInterface;
-use App\Reposiroty\Contract\PermissionRepositoryInterface;
-use App\Reposiroty\Contract\PostRepositoryInterface;
-use App\Reposiroty\Contract\ProfileRepositoryInterface;
-use App\Reposiroty\Contract\UserRepositoryInterface;
-use App\Reposiroty\Eloquent\AuthRepository;
-use App\Reposiroty\Eloquent\GroupRepository;
-use App\Reposiroty\Eloquent\PermissionRepository;
-use App\Reposiroty\Eloquent\PostRepository;
-use App\Reposiroty\Eloquent\ProfileRepository;
-use App\Reposiroty\Eloquent\UserRepository;
+use App\Repository\Contract\AuthRepositoryInterface;
+use App\Repository\Contract\GroupRepositoryInterface;
+use App\Repository\Contract\PermissionRepositoryInterface;
+use App\Repository\Contract\PostRepositoryInterface;
+use App\Repository\Contract\ProfileRepositoryInterface;
+use App\Repository\Contract\UserRepositoryInterface;
+use App\Repository\Eloquent\AuthRepository;
+use App\Repository\Eloquent\GroupRepository;
+use App\Repository\Eloquent\PermissionRepository;
+use App\Repository\Eloquent\PostRepository;
+use App\Repository\Eloquent\ProfileRepository;
+use App\Repository\Eloquent\UserRepository;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider

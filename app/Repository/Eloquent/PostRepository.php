@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Reposiroty\Eloquent;
+namespace App\Repository\Eloquent;
 
 use App\Models\Post;
 use App\Models\Translate;
-use App\Reposiroty\Contract\PostRepositoryInterface;
+use App\Repository\Contract\PostRepositoryInterface;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
 class PostRepository implements PostRepositoryInterface
@@ -53,9 +53,9 @@ class PostRepository implements PostRepositoryInterface
     {
         // TODO: Implement showAllPosts() method.
         if ($user['role_id'] == 1) {
-            return Post::paginate(10);
+            return Post::paginate(5);
         }
-        return Post::where('user_id', $user->id)->paginate(10);
+        return Post::where('user_id', $user->id)->paginate(5);
     }
 
     public function deletePost($id)

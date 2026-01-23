@@ -2,7 +2,7 @@
 
 namespace App\Service;
 
-use App\Reposiroty\Contract\GroupRepositoryInterface;
+use App\Repository\Contract\GroupRepositoryInterface;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
 class GroupService

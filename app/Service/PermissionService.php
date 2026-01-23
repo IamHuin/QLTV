@@ -2,7 +2,7 @@
 
 namespace App\Service;
 
-use App\Reposiroty\Contract\PermissionRepositoryInterface;
+use App\Repository\Contract\PermissionRepositoryInterface;
 
 class PermissionService
 {

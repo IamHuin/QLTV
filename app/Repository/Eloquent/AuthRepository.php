@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Reposiroty\Eloquent;
+namespace App\Repository\Eloquent;
 
 use App\Models\Permission;
 use App\Models\Profile;
 use App\Models\RolePermission;
 use App\Models\User;
-use App\Reposiroty\Contract\AuthRepositoryInterface;
+use App\Repository\Contract\AuthRepositoryInterface;
 
 class AuthRepository implements AuthRepositoryInterface
 {
