@@ -17,8 +17,8 @@ class GroupFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => $this->faker->title(),
-            'description' => $this->faker->regexify('[A-Za-z]{5,10}'),
+            'title' => $this->faker->sentence(),
+            'description' => $this->faker->sentence(),
         ];
     }
 }

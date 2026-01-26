@@ -28,13 +28,13 @@ class GroupController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage()
-            ]);
+            ], 403);
         }
         $this->groupService->createGroup($request->validated());
         return response()->json([
             'success' => true,
             'message' => __('Store Successfully'),
-        ], 200);
+        ], 201);
     }
 
     public function index()
@@ -45,7 +45,7 @@ class GroupController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage()
-            ]);
+            ], 403);
         }
         $group = $this->groupService->showAllGroups();
         return response()->json([
@@ -63,7 +63,7 @@ class GroupController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage()
-            ]);
+            ], 403);
         }
         $group = $this->groupService->getGroup($group->id);
         return response()->json([
@@ -81,13 +81,13 @@ class GroupController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage()
-            ]);
+            ], 403);
         }
         $this->groupService->updateGroup($group->id, $request);
         return response()->json([
             'success' => true,
             'message' => __('Update Successfully'),
-        ], 200);
+        ], 204);
     }
 
     public function destroy(Group $group)
@@ -98,13 +98,13 @@ class GroupController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage()
-            ]);
+            ], 403);
         }
         $this->groupService->deleteGroup($group->id);
         return response()->json([
             'success' => true,
             'message' => __('Delete Successfully'),
-        ]);
+        ], 204);
     }
 
     public function join(Group $group)
@@ -115,12 +115,12 @@ class GroupController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage()
-            ]);
+            ], 403);
         }
         $this->groupService->joinGroup($group->id);
         return response()->json([
             'success' => true,
             'message' => __('Joined Successfully')
-        ]);
+        ], 201);
     }
 }

@@ -21,11 +21,11 @@ class AuthController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => __('Store successfully'),
-            ]);
+            ], 201);
         }
         return response()->json([
             'success' => false,
             'message' => __('Unauthorized'),
-        ]);
+        ], 403);
     }
 }

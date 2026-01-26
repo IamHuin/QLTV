@@ -18,8 +18,8 @@ class PostFactory extends Factory
     {
         return [
             'user_id' => $this->faker->numberBetween(1, 10),
-            'title' => $this->faker->regexify('[A-Za-z]{5,10}'),
-            'content' => $this->faker->regexify('[A-Za-z]{5,10}'),
+            'title' => $this->faker->sentence(),
+            'content' => $this->faker->sentence(),
         ];
     }
 }

@@ -42,12 +42,12 @@ class UserController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => __('Register successfully'),
-            ], 200);
+            ], 201);
         }
         return response()->json([
             'success' => false,
             'message' => __('Register unsuccessfully'),
-        ]);
+        ], 400);
     }
 
     //Đăng nhập
@@ -61,12 +61,12 @@ class UserController extends Controller
                 'message' => __('Login successfully'),
                 'token' => $data['token'],
                 'expiresIn' => JWTAuth::factory()->getTTL() * 60,
-            ]);
+            ], 200);
         }
         return response()->json([
             'success' => false,
             'message' => __('Login unsuccessfully'),
-        ]);
+        ], 400);
     }
 
     //Đăng xuất
@@ -85,14 +85,14 @@ class UserController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage()
-            ]);
+            ], 403);
         }
         $show = $this->userService->showAllUser();
         return response()->json([
             'success' => true,
             'message' => __('Show successfully'),
             'data' => UserResource::collection($show),
-        ]);
+        ], 200);
 
     }
 
@@ -105,14 +105,14 @@ class UserController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage()
-            ]);
+            ], 403);
         }
         $show = $this->userService->showUser($user['id']);
         return response()->json([
             'success' => true,
             'message' => __('Show successfully'),
             'data' => new UserResource($show),
-        ]);
+        ], 200);
     }
 
     //Tìm kiếm thành viên
@@ -124,7 +124,7 @@ class UserController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage()
-            ]);
+            ], 403);
         }
         $show = $this->userService->searchUser($request['username']);
         if (isset($show)) {
@@ -132,12 +132,12 @@ class UserController extends Controller
                 'success' => true,
                 'message' => __('Show successfully'),
                 'data' => new UserResource($show),
-            ]);
+            ], 200);
         }
         return response()->json([
             'success' => false,
             'message' => __('Show unsuccessfully'),
-        ]);
+        ], 404);
 
     }
 
@@ -150,14 +150,14 @@ class UserController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage()
-            ]);
+            ], 403);
         }
         $this->userService->updateUser($request, $user['id']);
 
         return response()->json([
             'success' => true,
             'message' => __('Update successfully'),
-        ]);
+        ], 204);
 
     }
 
@@ -170,13 +170,13 @@ class UserController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage()
-            ]);
+            ], 403);
         }
         $this->userService->deleteUser($user['id']);
         return response()->json([
             'success' => true,
             'message' => __('Delete successfully'),
-        ]);
+        ], 204);
     }
 
 

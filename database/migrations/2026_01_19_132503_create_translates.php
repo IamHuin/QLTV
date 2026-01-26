@@ -14,10 +14,12 @@ return new class extends Migration {
             Schema::create('translates', function (Blueprint $table) {
                 $table->id();
                 $table->timestamps();
-                $table->foreignId('post_id')->constrained('posts');
+                $table->foreignId('post_id')->constrained('posts')->onDelete('cascade');
                 $table->string('lang');
                 $table->string('title');
                 $table->string('content');
+                $table->index(['post_id', 'lang']);
+                $table->index('lang');
             });
         }
     }
