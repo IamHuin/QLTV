@@ -28,14 +28,14 @@ class ProfileController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage()
-            ]);
+            ], 403);
         }
         $data = $this->profileService->showProfile($profile->id);
         return response()->json([
             'success' => true,
             'message' => __('Show successfully'),
             'data' => new ProfileResource($data)
-        ]);
+        ], 200);
     }
 
     public function update(Profile $profile, ProfileFormRequest $request)
@@ -46,12 +46,12 @@ class ProfileController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage()
-            ]);
+            ], 403);
         }
         $this->profileService->updateProfile($profile->id, $request->validated());
         return response()->json([
             'success' => true,
             'message' => __('Update successfully')
-        ]);
+        ], 204);
     }
 }

@@ -22,12 +22,12 @@ class PermissionController extends Controller
             return response()->json([
                 'success' => true,
                 'data' => PermissionResource::collection($data),
-            ]);
+            ], 200);
         }
         return response()->json([
             'success' => false,
             'message' => __('Unauthorized')
-        ]);
+        ], 403);
     }
 
     public function store(Request $request)
@@ -37,12 +37,12 @@ class PermissionController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => __('Store successfully')
-            ]);
+            ], 201);
         }
         return response()->json([
             'success' => false,
             'message' => __('Unauthorized')
-        ]);
+        ], 403);
     }
 
     public function update($permisson, Request $request)
@@ -52,12 +52,12 @@ class PermissionController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => __('Update successfully')
-            ]);
+            ], 204);
         }
         return response()->json([
             'success' => false,
             'message' => __('Unauthorized')
-        ]);
+        ], 403);
     }
 
     public function destroy($permission)
@@ -67,11 +67,11 @@ class PermissionController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => __('Delete successfully')
-            ]);
+            ], 204);
         }
         return response()->json([
             'success' => false,
             'message' => __('Unauthorized')
-        ]);
+        ], 403);
     }
 }

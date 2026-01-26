@@ -21,11 +21,11 @@ class MailController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => __('Mail successfully sent'),
-            ]);
+            ], 204);
         }
         return response()->json([
             'success' => false,
             'message' => __('Mail unsuccessfully sent'),
-        ]);
+        ], 404);
     }
 }
