@@ -51,7 +51,15 @@ class PostRepository implements PostRepositoryInterface
             if ($user['role_id'] == 1) {
 
                 $list_post = Translate::where('lang', $data['lang'])->paginate($limit);
-                return $list_post;
+                return [
+                    'data' => $list_post,
+                    'current_page' => $list_post->currentPage(),
+                    'last_page' => $list_post->lastPage(),
+                    'per_page' => $list_post->perPage(),
+                    'total' => $list_post->total(),
+                    'prev_page_url' => $list_post->previousPageUrl(),
+                    'next_page_url' => $list_post->nextPageUrl(),
+                ];
             }
             $list_post = Post::where('user_id', $user->id)->paginate($limit);
             $show = [];
@@ -62,8 +70,13 @@ class PostRepository implements PostRepositoryInterface
                 ])->first();
             }
             return [
-                'list' => $list_post,
                 'data' => $show,
+                'current_page' => $list_post->currentPage(),
+                'last_page' => $list_post->lastPage(),
+                'per_page' => $list_post->perPage(),
+                'total' => $list_post->total(),
+                'prev_page_url' => $list_post->previousPageUrl(),
+                'next_page_url' => $list_post->nextPageUrl(),
             ];
         }
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\PostCreateEvent;
 use App\Http\Requests\PostFormRequest;
 use App\Http\Resources\PostResource;
+use App\Http\Resources\TranslateResource;
 use App\Models\Post;
 use App\Service\PostService;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -36,13 +37,14 @@ class PostController extends Controller
         return response()->json([
             'success' => true,
             'message' => __('Show successfully'),
-            'data' => PostResource::collection($post['data']),
+            'data' => TranslateResource::collection($post['data']),
             'meta' => [
-                'current_page' => $post['list']->currentPage(),
-                'last_page' => $post['list']->lastPage(),
-                'per_page' => $post['list']->perPage(),
-                'prev_page_url' => $post['list']->previousPageUrl(),
-                'next_page_url' => $post['list']->nextPageUrl(),
+                'current_page' => $post['current_page'],
+                'last_page' => $post['last_page'],
+                'per_page' => $post['per_page'],
+                'total' => $post['total'],
+                'prev_page_url' => $post['prev_page_url'],
+                'next_page_url' => $post['next_page_url'],
             ],
         ], 200);
     }

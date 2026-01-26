@@ -18,6 +18,8 @@ return new class extends Migration {
                 $table->string('lang');
                 $table->string('title');
                 $table->string('content');
+                $table->index(['post_id', 'lang']);
+                $table->index('lang');
             });
         }
     }
