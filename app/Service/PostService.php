@@ -42,7 +42,7 @@ class PostService
     public function createPost($data)
     {
         $user = JWTAuth::user();
-        $language = ['vi', 'en', 'ja'];
+        $language = ['vi', 'en', 'ja', 'fr'];
         $translate = [];
         foreach ($language as $lang) {
             $tr = new GoogleTranslate($lang);

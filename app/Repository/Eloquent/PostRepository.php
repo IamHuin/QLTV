@@ -40,7 +40,7 @@ class PostRepository implements PostRepositoryInterface
     {
         // TODO: Implement showAllPosts() method.
         $limit = 5;
-        $page = isset($data['page']) ? (int)$data['page'] : 1;
+        $page = (int)$data['page'] ?? 1;
         $maxPage = 20;
 
         if ($page > $maxPage) {
@@ -48,9 +48,10 @@ class PostRepository implements PostRepositoryInterface
                 'error' => 'maxPage',
             ], 400);
         } else {
+            $lang = $data['lang'] ?? 'vi';
             if ($user['role_id'] == 1) {
 
-                $list_post = Translate::where('lang', $data['lang'])->paginate($limit);
+                $list_post = Translate::where('lang', $lang)->paginate($limit);
                 return [
                     'data' => $list_post,
                     'current_page' => $list_post->currentPage(),
@@ -66,7 +67,7 @@ class PostRepository implements PostRepositoryInterface
             foreach ($list_post as $post) {
                 $show [] = Translate::where([
                     ['post_id', $post->id],
-                    ['lang', $data['lang']],
+                    ['lang', $lang],
                 ])->first();
             }
             return [

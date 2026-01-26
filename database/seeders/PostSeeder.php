@@ -16,7 +16,7 @@ class PostSeeder extends Seeder
     public function run(): void
     {
         Post::factory(20)->create()->each(function ($post) {
-            $translate = ['en', 'ja', 'fr'];
+            $translate = ['vi', 'en', 'ja', 'fr'];
 
             foreach ($translate as $lang) {
                 $tr = new GoogleTranslate($lang);
