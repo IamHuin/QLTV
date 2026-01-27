@@ -6,6 +6,8 @@ interface PostRepositoryInterface
 {
     public function getPostById($lang, $id);
 
+    public function getPost($id);
+
     public function showAllPosts($user, $data);
 
     public function deletePost($id);

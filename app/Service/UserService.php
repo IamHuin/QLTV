@@ -17,12 +17,8 @@ class UserService
 
     public function showUser($id)
     {
-        $user = JWTAuth::user();
-        if ($user['role_id'] == 1 || ($user['role_id'] == 2 && $user['id'] == $id)) {
-            $data = $this->userRepo->showUser($id);
-            return $data;
-        }
-        return null;
+        $data = $this->userRepo->showUser($id);
+        return $data;
     }
 
     public function showAllUser()

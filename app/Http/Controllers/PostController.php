@@ -49,9 +49,9 @@ class PostController extends Controller
         ], 200);
     }
 
-    //Cách 1
-    public function show(Request $request, Post $post)
+    public function show(Request $request, $id)
     {
+        $post = $this->postService->getPost($id);
         try {
             $this->authorize('view', $post);
         } catch (AuthorizationException $e) {
@@ -60,31 +60,26 @@ class PostController extends Controller
                 'message' => $e->getMessage()
             ], 403);
         }
-        $data = $this->postService->getPost($request->lang, $post->id);
-        if (isset($data)) {
-            return response()->json([
-                'success' => true,
-                'message' => __('Show successfully'),
-                'data' => PostResource::collection($data)
-            ], 200);
-        }
+        $data = $this->postService->getPostById($request->lang, $id);
         return response()->json([
-            'success' => false,
-            'message' => __('Unauthorized')
-        ], 403);
+            'success' => true,
+            'message' => __('Show successfully'),
+            'data' => $request->lang ? TranslateResource::collection($data) : PostResource::collection($data),
+        ], 200);
     }
 
-    public function destroy(Post $post)
+    public function destroy($id)
     {
+        $post = $this->postService->getPost($id);
         try {
-            $this->authorize('delete', Post::class);
+            $this->authorize('delete', $post);
         } catch (AuthorizationException $e) {
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage()
             ], 403);
         }
-        $this->postService->deletePostById($post->id);
+        $this->postService->deletePostById($id);
         return response()->json([
             'success' => true,
             'message' => __('Delete successfully'),
@@ -109,8 +104,9 @@ class PostController extends Controller
         ], 201);
     }
 
-    public function update(Post $post, PostFormRequest $request)
+    public function update($id, PostFormRequest $request)
     {
+        $post = $this->postService->getPost($id);
         try {
             $this->authorize('update', $post);
         } catch (AuthorizationException $e) {
@@ -119,7 +115,7 @@ class PostController extends Controller
                 'message' => $e->getMessage()
             ], 403);
         }
-        $this->postService->updatePost($post->id, $request);
+        $this->postService->updatePost($id, $request);
         return response()->json([
             'success' => true,
             'message' => __('Update successfully'),

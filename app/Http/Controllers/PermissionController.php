@@ -45,9 +45,9 @@ class PermissionController extends Controller
         ], 403);
     }
 
-    public function update($permisson, Request $request)
+    public function update($id, Request $request)
     {
-        $data = $this->perService->updatePermission($permisson, $request->all());
+        $data = $this->perService->updatePermission($id, $request->all());
         if (isset($data)) {
             return response()->json([
                 'success' => true,
@@ -60,9 +60,9 @@ class PermissionController extends Controller
         ], 403);
     }
 
-    public function destroy($permission)
+    public function destroy($id)
     {
-        $data = $this->perService->deletePermission($permission);
+        $data = $this->perService->deletePermission($id);
         if (isset($data)) {
             return response()->json([
                 'success' => true,

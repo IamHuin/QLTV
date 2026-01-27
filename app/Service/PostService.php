@@ -24,13 +24,16 @@ class PostService
         return $posts;
     }
 
-    //Cách 1
-    public function getPost($lang, $id)
+    public function getPostById($lang, $id)
     {
         $data = $this->postRepo->getPostById($lang, $id);
         return $data;
     }
 
+    public function getPost($id)
+    {
+        return $this->postRepo->getPost($id);
+    }
 
     public function deletePostById($id)
     {

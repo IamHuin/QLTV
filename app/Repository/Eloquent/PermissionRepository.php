@@ -24,23 +24,23 @@ class PermissionRepository implements PermissionRepositoryInterface
         return Permission::all();
     }
 
-    public function updatePermission($permission, array $data)
+    public function updatePermission($id, array $data)
     {
         // TODO: Implement updatePermission() method.
-        $find = Permission::find($permission);
+        $find = Permission::find($id);
         if (isset($find)) {
             $find->update($data);
         }
         return $find;
     }
 
-    public function deletePermission($permission)
+    public function deletePermission($id)
     {
         // TODO: Implement deletePermission() method.
-        $exist = Permission::where('id', $permission)->exists();
+        $exist = Permission::where('id', $id)->exists();
         if (!$exist) {
             return null;
         }
-        return Permission::find($permission)->delete();
+        return Permission::find($id)->delete();
     }
 }

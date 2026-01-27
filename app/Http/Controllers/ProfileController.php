@@ -20,8 +20,9 @@ class ProfileController extends Controller
         $this->profileService = $profileService;
     }
 
-    public function show(Profile $profile)
+    public function show($id)
     {
+        $profile = $this->profileService->showProfile($id);
         try {
             $this->authorize('view', $profile);
         } catch (AuthorizationException $e) {
@@ -30,16 +31,17 @@ class ProfileController extends Controller
                 'message' => $e->getMessage()
             ], 403);
         }
-        $data = $this->profileService->showProfile($profile->id);
+
         return response()->json([
             'success' => true,
             'message' => __('Show successfully'),
-            'data' => new ProfileResource($data)
+            'data' => new ProfileResource($profile)
         ], 200);
     }
 
-    public function update(Profile $profile, ProfileFormRequest $request)
+    public function update($id, ProfileFormRequest $request)
     {
+        $profile = $this->profileService->showProfile($id);
         try {
             $this->authorize('update', $profile);
         } catch (AuthorizationException $e) {

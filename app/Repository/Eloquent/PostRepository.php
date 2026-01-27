@@ -19,9 +19,8 @@ class PostRepository implements PostRepositoryInterface
                 $translate = Translate::where('post_id', $id)->get();
                 return $translate;
             } else if (empty($lang)) {
-                $translate = Translate::where([
-                    ['lang', 'vi'],
-                    ['post_id', $id]
+                $translate = Post::where([
+                    ['id', $id]
                 ])->get();
                 return $translate;
             } else {
@@ -34,6 +33,11 @@ class PostRepository implements PostRepositoryInterface
 
         }
         return null;
+    }
+
+    public function getPost($id)
+    {
+        return Post::find($id);
     }
 
     public function showAllPosts($user, $data)
@@ -113,4 +117,5 @@ class PostRepository implements PostRepositoryInterface
         }
         return null;
     }
+
 }

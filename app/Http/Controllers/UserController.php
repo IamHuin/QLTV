@@ -97,22 +97,22 @@ class UserController extends Controller
     }
 
     //Chi tiết thành viên
-    public function show(User $user)
+    public function show($id)
     {
+        $user = $this->userService->showUser($id);
         try {
             $this->authorize('view', $user);
+            return response()->json([
+                'success' => true,
+                'message' => __('Show successfully'),
+                'data' => new UserResource($user),
+            ], 200);
         } catch (AuthorizationException $e) {
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage()
             ], 403);
         }
-        $show = $this->userService->showUser($user['id']);
-        return response()->json([
-            'success' => true,
-            'message' => __('Show successfully'),
-            'data' => new UserResource($show),
-        ], 200);
     }
 
     //Tìm kiếm thành viên
@@ -142,8 +142,9 @@ class UserController extends Controller
     }
 
     //Đổi password
-    public function update(UpdateFormRequest $request, User $user)
+    public function update(UpdateFormRequest $request, $id)
     {
+        $user = $this->userService->showUser($id);
         try {
             $this->authorize('update', $user);
         } catch (AuthorizationException $e) {
@@ -152,7 +153,7 @@ class UserController extends Controller
                 'message' => $e->getMessage()
             ], 403);
         }
-        $this->userService->updateUser($request, $user['id']);
+        $this->userService->updateUser($request, $id);
 
         return response()->json([
             'success' => true,
@@ -162,8 +163,9 @@ class UserController extends Controller
     }
 
     //Xóa thành viên
-    public function destroy(User $user)
+    public function destroy($id)
     {
+        $user = $this->userService->showUser($id);
         try {
             $this->authorize('delete', $user);
         } catch (AuthorizationException $e) {
@@ -172,7 +174,7 @@ class UserController extends Controller
                 'message' => $e->getMessage()
             ], 403);
         }
-        $this->userService->deleteUser($user['id']);
+        $this->userService->deleteUser($id);
         return response()->json([
             'success' => true,
             'message' => __('Delete successfully'),

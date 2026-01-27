@@ -18,16 +18,16 @@ class PermissionService
         return $this->perRepo->showPermission();
     }
 
-    public function updatePermission($permission, $data)
+    public function updatePermission($id, $data)
     {
-        return $this->perRepo->updatePermission($permission,[
+        return $this->perRepo->updatePermission($id, [
             'name' => $data['name'],
         ]);
     }
 
-    public function deletePermission($permission)
+    public function deletePermission($id)
     {
-        return $this->perRepo->deletePermission($permission);
+        return $this->perRepo->deletePermission($id);
     }
 
     public function createPermission($data)
