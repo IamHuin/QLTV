@@ -25,7 +25,7 @@ class PostController extends Controller
 
     public function index(Request $request)
     {
-        $paginate = [
+        $data = [
             'limit' => $request['limit'] ?? 5,
             'page' => $request['page'] ?? 1,
             'maxPage' => $request['maxPage'] ?? 20,
@@ -39,7 +39,7 @@ class PostController extends Controller
                 'message' => $e->getMessage()
             ], 403);
         }
-        $post = $this->postService->showAllPosts($paginate);
+        $post = $this->postService->showAllPosts($data);
         return response()->json([
             'success' => true,
             'message' => __('Show successfully'),
