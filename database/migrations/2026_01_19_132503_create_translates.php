@@ -14,7 +14,8 @@ return new class extends Migration {
             Schema::create('translates', function (Blueprint $table) {
                 $table->id();
                 $table->timestamps();
-                $table->foreignId('post_id')->constrained('posts')->onDelete('cascade');
+                $table->softDeletes();
+                $table->foreignId('post_id')->constrained('posts');
                 $table->string('lang');
                 $table->string('title');
                 $table->string('content');

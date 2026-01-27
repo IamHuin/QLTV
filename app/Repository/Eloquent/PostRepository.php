@@ -92,6 +92,7 @@ class PostRepository implements PostRepositoryInterface
     {
         // TODO: Implement deletePost() method.
         $data = Post::find($id)->delete();
+        Translate::where('post_id', $id)->delete();
         return $data;
     }
 
