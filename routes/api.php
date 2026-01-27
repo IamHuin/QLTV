@@ -8,8 +8,6 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\UserController;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\SendMail;
 
 Route::post('register', [UserController::class, 'register'])->name('api.register');
 Route::post('login', [UserController::class, 'login'])->name('api.login');
@@ -18,7 +16,7 @@ Route::middleware('auth:api')->group(function () {
     Route::middleware('role:1')->group(function () {
         //User
         Route::get('user', [UserController::class, 'index'])->name('user.index');
-        Route::post('user', [UserController::class, 'find'])->name('user.find');
+        Route::get('user/search', [UserController::class, 'search'])->name('user.search');
         Route::delete('user/{id}', [UserController::class, 'destroy'])->name('user.destroy');
         //Group
         Route::patch('group/{id}', [GroupController::class, 'update'])->name('group.update');

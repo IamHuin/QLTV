@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Models\Post;
 use App\Repository\Contract\PostRepositoryInterface;
+use Illuminate\Support\Facades\Auth;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 use Stichoza\GoogleTranslate\GoogleTranslate;
 
@@ -19,7 +20,7 @@ class PostService
 
     public function showAllPosts($data)
     {
-        $user = JWTAuth::user();
+        $user = Auth::user();
         $posts = $this->postRepo->showAllPosts($user, $data);
         return $posts;
     }
@@ -41,10 +42,9 @@ class PostService
         return $data;
     }
 
-    //Cách 1: Nhận form về là tạo bản dịch lưu vào db
     public function createPost($data)
     {
-        $user = JWTAuth::user();
+        $user = Auth::user();
         $language = ['vi', 'en', 'ja', 'fr'];
         $translate = [];
         foreach ($language as $lang) {

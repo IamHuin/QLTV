@@ -6,6 +6,7 @@ use App\Models\Post;
 use App\Models\Translate;
 use App\Repository\Contract\PostRepositoryInterface;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
+use Stichoza\GoogleTranslate\GoogleTranslate;
 
 class PostRepository implements PostRepositoryInterface
 {
@@ -43,16 +44,16 @@ class PostRepository implements PostRepositoryInterface
     public function showAllPosts($user, $data)
     {
         // TODO: Implement showAllPosts() method.
-        $limit = 5;
-        $page = (int)$data['page'] ?? 1;
-        $maxPage = 20;
+        $limit = (int)$data['limit'];
+        $page = (int)$data['page'];
+        $maxPage = (int)$data['maxPage'];
 
         if ($page > $maxPage) {
             return response()->json([
                 'error' => 'maxPage',
             ], 400);
         } else {
-            $lang = $data['lang'] ?? 'vi';
+            $lang = $data['lang'];
             if ($user['role_id'] == 1) {
 
                 $list_post = Translate::where('lang', $lang)->paginate($limit);
@@ -113,6 +114,17 @@ class PostRepository implements PostRepositoryInterface
         $post = Post::find($id);
         if (isset($post)) {
             $post->update($data);
+            $lang = ['vi', 'en', 'ja', 'fr'];
+            foreach ($lang as $key) {
+                $tr = new GoogleTranslate($key);
+                Translate::where([
+                    ['post_id', $post->id],
+                    ['lang', $key],
+                ])->update([
+                    'title' => $tr->translate($post['title']),
+                    'content' => $tr->translate($post['content']),
+                ]);
+            }
             return $post;
         }
         return null;

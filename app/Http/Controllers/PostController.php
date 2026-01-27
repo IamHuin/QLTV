@@ -25,6 +25,12 @@ class PostController extends Controller
 
     public function index(Request $request)
     {
+        $paginate = [
+            'limit' => $request['limit'] ?? 5,
+            'page' => $request['page'] ?? 1,
+            'maxPage' => $request['maxPage'] ?? 20,
+            'lang' => $request['lang'] ?? 'vi'
+        ];
         try {
             $this->authorize('viewAny', Post::class);
         } catch (AuthorizationException $e) {
@@ -33,7 +39,7 @@ class PostController extends Controller
                 'message' => $e->getMessage()
             ], 403);
         }
-        $post = $this->postService->showAllPosts($request);
+        $post = $this->postService->showAllPosts($paginate);
         return response()->json([
             'success' => true,
             'message' => __('Show successfully'),

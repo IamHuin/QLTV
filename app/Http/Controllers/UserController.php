@@ -116,7 +116,7 @@ class UserController extends Controller
     }
 
     //Tìm kiếm thành viên
-    public function find(Request $request)
+    public function search(Request $request)
     {
         try {
             $this->authorize('search', User::class);
