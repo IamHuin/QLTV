@@ -92,7 +92,24 @@ class PostController extends Controller
         ], 204);
     }
 
-    public function store(PostFormRequest $request)
+    public function destroyMulti(Request $request)
+    {
+        $ids = $request->input('ids');
+        if (empty($ids)) {
+            return response()->json([
+                'success' => false,
+                'message' => __('Invalid')
+            ]);
+        }
+        $this->postService->deleteMutiPost($ids);
+        return response()->json([
+            'success' => true,
+            'message' => __('Delete successfully')
+        ]);
+    }
+
+    public
+    function store(PostFormRequest $request)
     {
         try {
             $this->authorize('create', Post::class);
@@ -110,7 +127,8 @@ class PostController extends Controller
         ], 201);
     }
 
-    public function update($id, PostFormRequest $request)
+    public
+    function update($id, PostFormRequest $request)
     {
         $post = $this->postService->getPost($id);
         try {
@@ -126,5 +144,21 @@ class PostController extends Controller
             'success' => true,
             'message' => __('Update successfully'),
         ], 204);
+    }
+
+    public function multiUpdate(Request $request)
+    {
+        $data = $request->input('data');
+        if (empty($data)) {
+            return response()->json([
+                'success' => false,
+                'message' => __('Invalid')
+            ]);
+        }
+        $this->postService->updateMultiPost($data);
+        return response()->json([
+            'success' => true,
+            'message' => __('Update successfully')
+        ]);
     }
 }

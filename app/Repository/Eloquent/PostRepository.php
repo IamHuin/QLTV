@@ -129,4 +129,31 @@ class PostRepository implements PostRepositoryInterface
         return null;
     }
 
+    public function deleteMultiPost(array $ids)
+    {
+        // TODO: Implement deleteMultiPost() method.
+        Post::whereIn('id', $ids)->delete();
+        Translate::whereIn('post_id', $ids)->delete();
+    }
+
+    public function updateMultiPost(array $data, array $translate)
+    {
+        // TODO: Implement updateMultiPost() method.
+        foreach ($data as $key) {
+            $post = Post::where('id', $key['id'])->update([
+                'title' => $key['title'],
+                'content' => $key['content'],
+            ]);
+            foreach ($translate[$key['id']] as $lang => $value) {
+                Translate::where([
+                    ['post_id', $key['id']],
+                    ['lang', $lang],
+                ])->update([
+                    'title' => $value['title'],
+                    'content' => $value['content'],
+                ]);
+            }
+        }
+
+    }
 }

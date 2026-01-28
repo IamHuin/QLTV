@@ -48,8 +48,10 @@ Route::middleware('auth:api')->group(function () {
         Route::get('post', [PostController::class, 'index'])->name('post.index');
         Route::get('post/{id}', [PostController::class, 'show'])->name('post.show');
         Route::patch('post/{id}', [PostController::class, 'update'])->name('post.update');
+        Route::put('post', [PostController::class, 'multiUpdate'])->name('post.multiUpdate');
         Route::post('post', [PostController::class, 'store'])->name('post.store');
         Route::delete('post/{id}', [PostController::class, 'destroy'])->name('post.destroy');
+        Route::delete('post', [PostController::class, 'destroyMulti'])->name('post.destroyMulti');
     });
     //Group
     Route::middleware('permission:manageGroup')->group(function () {

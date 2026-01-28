@@ -42,6 +42,11 @@ class PostService
         return $data;
     }
 
+    public function deleteMutiPost($ids)
+    {
+        return $this->postRepo->deleteMultiPost($ids);
+    }
+
     public function createPost($data)
     {
         $user = Auth::user();
@@ -52,10 +57,15 @@ class PostService
                 'content' => $this->tranService->translate($data['content'], $lang),
             ];
         }
+        $imagePath = null;
+        if ($data->hasFile('image')) {
+            $imagePath = $data->file('image')->store('posts', 'public');
+        }
         $post = $this->postRepo->createPost([
             'user_id' => $user['id'],
             'title' => $data['title'],
             'content' => $data['content'],
+            'image' => $imagePath,
         ], $translate);
         return $post;
     }
@@ -69,10 +79,29 @@ class PostService
                 'content' => $this->tranService->translate($data['content'], $lang),
             ];
         }
-        $post = $this->postRepo->updatePost($id, [
+        $update = [
             'title' => $data['title'],
             'content' => $data['content'],
-        ], $translate);
+            'image' => $data['image'],
+        ];
+        if ($data->hasFile('image')) {
+            $update['image'] = $data->file('image')->store('posts', 'public');
+        }
+        $post = $this->postRepo->updatePost($id, $update, $translate);
         return $post;
+    }
+
+    public function updateMultiPost($data)
+    {
+        $translate = [];
+        foreach ($data as $key) {
+            foreach (config('app.lang') as $lang) {
+                $translate[$key['id']][$lang] = [
+                    'title' => $this->tranService->translate($key['title'], $lang),
+                    'content' => $this->tranService->translate($key['content'], $lang),
+                ];
+            }
+        }
+        return $this->postRepo->updateMultiPost($data, $translate);
     }
 }
