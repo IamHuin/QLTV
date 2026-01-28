@@ -2,20 +2,20 @@
 
 namespace App\Service;
 
-use App\Models\Post;
+use App\Contract\TranslateInterface;
 use App\Repository\Contract\PostRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
-use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
-use Stichoza\GoogleTranslate\GoogleTranslate;
 
 
 class PostService
 {
     protected $postRepo;
+    protected $tranService;
 
-    public function __construct(PostRepositoryInterface $postRepo)
+    public function __construct(PostRepositoryInterface $postRepo, TranslateInterface $tranService)
     {
         $this->postRepo = $postRepo;
+        $this->tranService = $tranService;
     }
 
     public function showAllPosts($data)
@@ -45,15 +45,11 @@ class PostService
     public function createPost($data)
     {
         $user = Auth::user();
-        $language = ['vi', 'en', 'ja', 'fr'];
         $translate = [];
-        foreach ($language as $lang) {
-            $tr = new GoogleTranslate($lang);
-            $tr->setSource('vi');
-            $tr->setTarget($lang);
+        foreach (config('app.lang') as $lang) {
             $translate[$lang] = [
-                'title' => $tr->translate($data['title']),
-                'content' => $tr->translate($data['content']),
+                'title' => $this->tranService->translate($data['title'], $lang),
+                'content' => $this->tranService->translate($data['content'], $lang),
             ];
         }
         $post = $this->postRepo->createPost([
@@ -66,10 +62,17 @@ class PostService
 
     public function updatePost($id, $data)
     {
+        $translate = [];
+        foreach (config('app.lang') as $lang) {
+            $translate[$lang] = [
+                'title' => $this->tranService->translate($data['title'], $lang),
+                'content' => $this->tranService->translate($data['content'], $lang),
+            ];
+        }
         $post = $this->postRepo->updatePost($id, [
             'title' => $data['title'],
             'content' => $data['content'],
-        ]);
+        ], $translate);
         return $post;
     }
 }

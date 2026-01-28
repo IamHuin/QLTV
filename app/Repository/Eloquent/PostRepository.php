@@ -44,9 +44,9 @@ class PostRepository implements PostRepositoryInterface
     public function showAllPosts($user, $data)
     {
         // TODO: Implement showAllPosts() method.
-        $limit = (int)$data['limit'];
-        $page = (int)$data['page'];
-        $maxPage = (int)$data['maxPage'];
+        $limit = $data['limit'];
+        $page = $data['page'];
+        $maxPage = $data['maxPage'];
 
         if ($page > $maxPage) {
             return response()->json([
@@ -99,10 +99,10 @@ class PostRepository implements PostRepositoryInterface
     public function createPost(array $data, array $translate)
     {
         $post = Post::create($data);
-        foreach ($translate as $key => $value) {
+        foreach ($translate as $lang => $value) {
             Translate::create([
                 'post_id' => $post->id,
-                'lang' => $key,
+                'lang' => $lang,
                 'title' => $value['title'],
                 'content' => $value['content'],
             ]);
@@ -110,20 +110,18 @@ class PostRepository implements PostRepositoryInterface
         return $post;
     }
 
-    public function updatePost($id, array $data)
+    public function updatePost($id, array $data, array $translate)
     {
         $post = Post::find($id);
         if (isset($post)) {
             $post->update($data);
-            $lang = ['vi', 'en', 'ja', 'fr'];
-            foreach ($lang as $key) {
-                $tr = new GoogleTranslate($key);
+            foreach ($translate as $lang => $value) {
                 Translate::where([
-                    ['post_id', $post->id],
-                    ['lang', $key],
+                    ['post_id', $id],
+                    ['lang', $lang],
                 ])->update([
-                    'title' => $tr->translate($post['title']),
-                    'content' => $tr->translate($post['content']),
+                    'title' => $value['title'],
+                    'content' => $value['content'],
                 ]);
             }
             return $post;

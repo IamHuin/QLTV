@@ -26,10 +26,10 @@ class PostController extends Controller
     public function index(Request $request)
     {
         $data = [
-            'limit' => $request['limit'] ?? 5,
-            'page' => $request['page'] ?? 1,
-            'maxPage' => $request['maxPage'] ?? 20,
-            'lang' => $request['lang'] ?? 'vi'
+            'limit' => max(1, (int)$request->input('limit', 5)),
+            'page' => max(1, (int)$request->input('page', 1)),
+            'maxPage' => max(1, (int)$request->input('maxPage', 20)),
+            'lang' => $request->input('lang', 'vi'),
         ];
         try {
             $this->authorize('viewAny', Post::class);
