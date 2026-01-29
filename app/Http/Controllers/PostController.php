@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\PostCreateEvent;
 use App\Http\Requests\PostFormRequest;
+use App\Http\Requests\UpdatePostRequest;
 use App\Http\Resources\PostResource;
 use App\Http\Resources\TranslateResource;
 use App\Models\Post;
@@ -127,8 +128,7 @@ class PostController extends Controller
         ], 201);
     }
 
-    public
-    function update($id, PostFormRequest $request)
+    public function update($id, PostFormRequest $request)
     {
         $post = $this->postService->getPost($id);
         try {

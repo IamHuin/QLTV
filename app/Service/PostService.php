@@ -3,8 +3,10 @@
 namespace App\Service;
 
 use App\Contract\TranslateInterface;
+use App\Models\Image;
 use App\Repository\Contract\PostRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 
 class PostService
@@ -71,24 +73,33 @@ class PostService
         return $post;
     }
 
-    public function updatePost($id, $data)
+    public function updatePost($id, $request)
     {
         $translate = [];
         foreach (config('app.lang') as $lang) {
             $translate[$lang] = [
-                'title' => $this->tranService->translate($data['title'], $lang),
-                'content' => $this->tranService->translate($data['content'], $lang),
+                'title' => $this->tranService->translate($request['title'], $lang),
+                'content' => $this->tranService->translate($request['content'], $lang),
             ];
         }
-        $update = [
-            'title' => $data['title'],
-            'content' => $data['content'],
-            'image' => $data['image'],
+        $data = [
+            'title' => $request['title'],
+            'content' => $request['content'],
         ];
-        if ($data->hasFile('image')) {
-            $update['image'] = $data->file('image')->store('posts', 'public');
+        $image = Image::where('post_id', $id)->get();
+        foreach ($image as $item) {
+            if (Storage::disk('public')->exists($item->image)) {
+                Storage::disk('public')->delete($item->image);
+            }
+            $item->delete();
         }
-        $post = $this->postRepo->updatePost($id, $update, $translate);
+        $imagePath = [];
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $item) {
+                $imagePath[] = $item->store('posts', 'public');
+            }
+        }
+        $post = $this->postRepo->updatePost($id, $data, $imagePath, $translate);
         return $post;
     }
 
