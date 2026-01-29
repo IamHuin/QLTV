@@ -3,7 +3,6 @@
 namespace App\Service;
 
 use App\Repository\Contract\ProfileRepositoryInterface;
-use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
 class ProfileService
 {

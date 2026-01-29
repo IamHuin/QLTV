@@ -10,7 +10,6 @@ use App\Models\Post;
 use App\Service\PostService;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
-use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
 
 class PostController extends Controller
@@ -25,6 +24,12 @@ class PostController extends Controller
 
     public function index(Request $request)
     {
+        $data = [
+            'limit' => max(1, (int)$request->input('limit', 5)),
+            'page' => max(1, (int)$request->input('page', 1)),
+            'maxPage' => max(1, (int)$request->input('maxPage', 20)),
+            'lang' => $request->input('lang', config('app.default_lang')),
+        ];
         try {
             $this->authorize('viewAny', Post::class);
         } catch (AuthorizationException $e) {
@@ -33,7 +38,7 @@ class PostController extends Controller
                 'message' => $e->getMessage()
             ], 403);
         }
-        $post = $this->postService->showAllPosts($request);
+        $post = $this->postService->showAllPosts($data);
         return response()->json([
             'success' => true,
             'message' => __('Show successfully'),
@@ -86,7 +91,24 @@ class PostController extends Controller
         ], 204);
     }
 
-    public function store(PostFormRequest $request)
+    public function destroyMulti(Request $request)
+    {
+        $ids = $request->input('ids');
+        if (empty($ids)) {
+            return response()->json([
+                'success' => false,
+                'message' => __('Invalid')
+            ]);
+        }
+        $this->postService->deleteMutiPost($ids);
+        return response()->json([
+            'success' => true,
+            'message' => __('Delete successfully')
+        ]);
+    }
+
+    public
+    function store(PostFormRequest $request)
     {
         try {
             $this->authorize('create', Post::class);
@@ -101,10 +123,12 @@ class PostController extends Controller
         return response()->json([
             'success' => true,
             'message' => __('Store successfully'),
+            'data' => new PostResource($post),
         ], 201);
     }
 
-    public function update($id, PostFormRequest $request)
+    public
+    function update($id, PostFormRequest $request)
     {
         $post = $this->postService->getPost($id);
         try {
@@ -120,5 +144,21 @@ class PostController extends Controller
             'success' => true,
             'message' => __('Update successfully'),
         ], 204);
+    }
+
+    public function multiUpdate(Request $request)
+    {
+        $data = $request->input('data');
+        if (empty($data)) {
+            return response()->json([
+                'success' => false,
+                'message' => __('Invalid')
+            ]);
+        }
+        $this->postService->updateMultiPost($data);
+        return response()->json([
+            'success' => true,
+            'message' => __('Update successfully')
+        ]);
     }
 }

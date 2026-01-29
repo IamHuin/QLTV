@@ -18,5 +18,6 @@
     "Must be unique.": "Phải là duy nhất.",
     "Format is invalid.": "Định dạng không hợp lệ",
     "Mail successfully sent": "Gửi Mail thành công",
-    "Mail unsuccessfully sent": "Gửi Mail không thành công"
+    "Mail unsuccessfully sent": "Gửi Mail không thành công",
+    "Invalid": "Không hợp lệ"
 }

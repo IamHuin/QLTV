@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Contract\TranslateInterface;
 use App\Repository\Contract\AuthRepositoryInterface;
 use App\Repository\Contract\GroupRepositoryInterface;
 use App\Repository\Contract\PermissionRepositoryInterface;
@@ -14,6 +15,7 @@ use App\Repository\Eloquent\PermissionRepository;
 use App\Repository\Eloquent\PostRepository;
 use App\Repository\Eloquent\ProfileRepository;
 use App\Repository\Eloquent\UserRepository;
+use App\Service\TranslateService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -30,6 +32,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(GroupRepositoryInterface::class, GroupRepository::class);
         $this->app->bind(AuthRepositoryInterface::class, AuthRepository::class);
         $this->app->bind(PermissionRepositoryInterface::class, PermissionRepository::class);
+        $this->app->singleton(TranslateInterface::class, TranslateService::class);
     }
 
     /**
