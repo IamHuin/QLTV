@@ -10,7 +10,6 @@ use App\Models\Post;
 use App\Service\PostService;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
-use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
 
 class PostController extends Controller
@@ -29,7 +28,7 @@ class PostController extends Controller
             'limit' => max(1, (int)$request->input('limit', 5)),
             'page' => max(1, (int)$request->input('page', 1)),
             'maxPage' => max(1, (int)$request->input('maxPage', 20)),
-            'lang' => $request->input('lang', 'vi'),
+            'lang' => $request->input('lang', config('app.default_lang')),
         ];
         try {
             $this->authorize('viewAny', Post::class);
@@ -124,6 +123,7 @@ class PostController extends Controller
         return response()->json([
             'success' => true,
             'message' => __('Store successfully'),
+            'data' => new PostResource($post),
         ], 201);
     }
 

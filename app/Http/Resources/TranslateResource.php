@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Image;
+use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -18,6 +20,7 @@ class TranslateResource extends JsonResource
             'id' => $this->post_id,
             'title' => $this->title,
             'content' => $this->content,
+            'images' => Image::imagePath($this->post_id),
         ];
     }
 }

@@ -57,16 +57,17 @@ class PostService
                 'content' => $this->tranService->translate($data['content'], $lang),
             ];
         }
-        $imagePath = null;
-        if ($data->hasFile('image')) {
-            $imagePath = $data->file('image')->store('posts', 'public');
+        if ($data->hasFile('images')) {
+            $imagePath = [];
+            foreach ($data->file('images') as $image) {
+                $imagePath[] = $image->store('posts', 'public');
+            }
         }
         $post = $this->postRepo->createPost([
             'user_id' => $user['id'],
             'title' => $data['title'],
             'content' => $data['content'],
-            'image' => $imagePath,
-        ], $translate);
+        ], $imagePath, $translate);
         return $post;
     }
 

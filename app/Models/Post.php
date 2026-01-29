@@ -18,7 +18,6 @@ class Post extends Model
         'user_id',
         'title',
         'content',
-        'image',
         'delete_at'
     ];
 }

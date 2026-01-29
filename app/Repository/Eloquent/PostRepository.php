@@ -2,6 +2,7 @@
 
 namespace App\Repository\Eloquent;
 
+use App\Models\Image;
 use App\Models\Post;
 use App\Models\Translate;
 use App\Repository\Contract\PostRepositoryInterface;
@@ -96,7 +97,7 @@ class PostRepository implements PostRepositoryInterface
         return $data;
     }
 
-    public function createPost(array $data, array $translate)
+    public function createPost(array $data, array $imagePath, array $translate)
     {
         $post = Post::create($data);
         foreach ($translate as $lang => $value) {
@@ -105,6 +106,12 @@ class PostRepository implements PostRepositoryInterface
                 'lang' => $lang,
                 'title' => $value['title'],
                 'content' => $value['content'],
+            ]);
+        }
+        foreach ($imagePath as $image) {
+            Image::create([
+                'post_id' => $post->id,
+                'image' => $image,
             ]);
         }
         return $post;

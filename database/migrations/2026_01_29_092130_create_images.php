@@ -10,14 +10,13 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        if (Schema::hasTable('users')) {
-            Schema::create('posts', function (Blueprint $table) {
+        if (Schema::hasTable('posts')) {
+            Schema::create('images', function (Blueprint $table) {
                 $table->id();
-                $table->foreignId('user_id')->constrained('users');
-                $table->string('title');
-                $table->string('content');
-                $table->softDeletes();
                 $table->timestamps();
+                $table->softDeletes();
+                $table->string('image')->nullable();
+                $table->foreignId('post_id')->constrained('posts');
             });
         }
     }
@@ -27,6 +26,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('posts');
+        Schema::dropIfExists('images');
     }
 };

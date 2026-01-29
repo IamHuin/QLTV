@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Image;
 use App\Models\Post;
 use App\Models\Translate;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -16,11 +17,10 @@ class PostSeeder extends Seeder
     public function run(): void
     {
         Post::factory(20)->create()->each(function ($post) {
-            $translate = ['vi', 'en', 'ja', 'fr'];
 
-            foreach ($translate as $lang) {
+            foreach (config('app.lang') as $lang) {
                 $tr = new GoogleTranslate($lang);
-                $tr->setSource('vi');
+                $tr->setSource(config('app.default_lang'));
                 $tr->setTarget($lang);
                 Translate::create([
                     'post_id' => $post->id,
@@ -29,6 +29,8 @@ class PostSeeder extends Seeder
                     'content' => $tr->translate($post->content),
                 ]);
             }
+
+            Image::factory(2)->create(['post_id' => $post->id]);
         });
     }
 }

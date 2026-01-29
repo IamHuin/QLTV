@@ -24,7 +24,7 @@ class PostFormRequest extends FormRequest
         return [
             'title' => 'required|min:3',
             'content' => 'required|min:3',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
     }
 
@@ -35,9 +35,9 @@ class PostFormRequest extends FormRequest
             'title.min' => __('Must be at least 3 characters.'),
             'content.required' => __('Field is required.'),
             'content.min' => __('Must be at least 3 characters.'),
-            'image.image' => __('Format is invalid.'),
-            'image.mimes' => __('Format is invalid.'),
-            'image.max' => __('Max file size is 2 MB.'),
+            'images.image' => __('Format is invalid.'),
+            'images.mimes' => __('Format is invalid.'),
+            'images.max' => __('Max file size is 2 MB.'),
         ];
     }
 }
