@@ -12,7 +12,7 @@ class TranslateService implements TranslateInterface
     {
         // TODO: Implement translate() method.
         $tr = new GoogleTranslate($to);
-        $tr->setSource(config('app.default_lang'));
+        $tr->setSource(config('translate.default_lang'));
         $tr->setTarget($to);
         return $tr->translate($text);
     }

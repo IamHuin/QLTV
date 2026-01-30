@@ -30,6 +30,8 @@ Route::middleware('auth:api')->group(function () {
         Route::post('auth', [AuthController::class, 'store'])->name('auth.store');
         //Mail
         Route::get('mail', [MailController::class, 'sendMail'])->name('mail.sendMail');
+        //Post
+        Route::get('post/search', [PostController::class, 'search'])->name('post.search');
     });
     Route::post('logout', [UserController::class, 'logout'])->name('api.logout');
     //User

@@ -86,6 +86,16 @@ class UserController extends Controller
             'success' => true,
             'message' => __('Show successfully'),
             'data' => UserResource::collection($show),
+            'meta' => [
+                'current_page' => $show->currentPage(),
+                'last_page' => $show->lastPage(),
+                'per_page' => $show->perPage(),
+                'to' => $show->lastPage(),
+                'total' => $show->total(),
+                'totalPages' => $show->totalPages(),
+                'next_page_url' => $show->nextPageUrl(),
+                'prev_page_url' => $show->previousPageUrl(),
+            ],
         ], 200);
 
     }

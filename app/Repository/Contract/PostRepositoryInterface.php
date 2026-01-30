@@ -14,9 +14,11 @@ interface PostRepositoryInterface
 
     public function updatePost($id, array $data, array $imagePath, array $translate);
 
-    public function createPost(array $data, array $imagePath, array $translate);
+    public function createPost(array $data, array $translate);
 
     public function deleteMultiPost(array $ids);
 
     public function updateMultiPost(array $data, array $translate);
+
+    public function searchPosts($title, $data);
 }

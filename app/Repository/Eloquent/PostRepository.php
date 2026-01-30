@@ -96,7 +96,7 @@ class PostRepository implements PostRepositoryInterface
         return $data;
     }
 
-    public function createPost(array $data, array $imagePath, array $translate)
+    public function createPost(array $data, array $translate)
     {
         $post = Post::create($data);
         foreach ($translate as $lang => $value) {
@@ -105,12 +105,6 @@ class PostRepository implements PostRepositoryInterface
                 'lang' => $lang,
                 'title' => $value['title'],
                 'content' => $value['content'],
-            ]);
-        }
-        foreach ($imagePath as $image) {
-            Image::create([
-                'post_id' => $post->id,
-                'image' => $image,
             ]);
         }
         return $post;
@@ -130,16 +124,16 @@ class PostRepository implements PostRepositoryInterface
                     'image' => $item,
                 ]);
             }
-//            foreach ($translate as $lang => $value) {
-//                Translate::where([
-//                    ['post_id', $id],
-//                    ['lang', $lang],
-//                ])->update([
-//                    'title' => $value['title'],
-//                    'content' => $value['content'],
-//                ]);
-//            }
-//            return $post;
+            foreach ($translate as $lang => $value) {
+                Translate::where([
+                    ['post_id', $id],
+                    ['lang', $lang],
+                ])->update([
+                    'title' => $value['title'],
+                    'content' => $value['content'],
+                ]);
+            }
+            return $post;
         }
         return null;
     }
@@ -170,5 +164,19 @@ class PostRepository implements PostRepositoryInterface
             }
         }
 
+    }
+
+    public function searchPosts($title, $data)
+    {
+        if ($data['page'] > $data['maxPage']) {
+            return response()->json([
+                'error' => 'maxPage',
+            ], 400);
+        }
+        $list_post = Post::where([
+            ['title', 'like', '%' . $title . '%'],
+        ])->pluck('id');
+        $data = Translate::whereIn('post_id', $list_post)->where('lang', $data['lang'])->paginate($data['limit']);
+        return $data;
     }
 }
