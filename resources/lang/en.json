@@ -18,5 +18,6 @@
     "Must be unique.": "Must be unique.",
     "Format is invalid.": "Format is invalid.",
     "Mail successfully sent": "Mail successfully sent",
-    "Mail unsuccessfully sent": "Mail unsuccessfully sent"
+    "Mail unsuccessfully sent": "Mail unsuccessfully sent",
+    "Invalid": "Invalid"
 }

@@ -8,8 +8,6 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\UserController;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\SendMail;
 
 Route::post('register', [UserController::class, 'register'])->name('api.register');
 Route::post('login', [UserController::class, 'login'])->name('api.login');
@@ -18,7 +16,7 @@ Route::middleware('auth:api')->group(function () {
     Route::middleware('role:1')->group(function () {
         //User
         Route::get('user', [UserController::class, 'index'])->name('user.index');
-        Route::post('user', [UserController::class, 'find'])->name('user.find');
+        Route::get('user/search', [UserController::class, 'search'])->name('user.search');
         Route::delete('user/{id}', [UserController::class, 'destroy'])->name('user.destroy');
         //Group
         Route::patch('group/{id}', [GroupController::class, 'update'])->name('group.update');
@@ -32,6 +30,8 @@ Route::middleware('auth:api')->group(function () {
         Route::post('auth', [AuthController::class, 'store'])->name('auth.store');
         //Mail
         Route::get('mail', [MailController::class, 'sendMail'])->name('mail.sendMail');
+        //Post
+        Route::get('post/search', [PostController::class, 'search'])->name('post.search');
     });
     Route::post('logout', [UserController::class, 'logout'])->name('api.logout');
     //User
@@ -50,8 +50,10 @@ Route::middleware('auth:api')->group(function () {
         Route::get('post', [PostController::class, 'index'])->name('post.index');
         Route::get('post/{id}', [PostController::class, 'show'])->name('post.show');
         Route::patch('post/{id}', [PostController::class, 'update'])->name('post.update');
+        Route::put('post', [PostController::class, 'multiUpdate'])->name('post.multiUpdate');
         Route::post('post', [PostController::class, 'store'])->name('post.store');
         Route::delete('post/{id}', [PostController::class, 'destroy'])->name('post.destroy');
+        Route::delete('post', [PostController::class, 'destroyMulti'])->name('post.destroyMulti');
     });
     //Group
     Route::middleware('permission:manageGroup')->group(function () {

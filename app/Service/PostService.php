@@ -2,24 +2,27 @@
 
 namespace App\Service;
 
-use App\Models\Post;
+use App\Contract\TranslateInterface;
+use App\Models\Image;
 use App\Repository\Contract\PostRepositoryInterface;
-use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
-use Stichoza\GoogleTranslate\GoogleTranslate;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 
 class PostService
 {
     protected $postRepo;
+    protected $tranService;
 
-    public function __construct(PostRepositoryInterface $postRepo)
+    public function __construct(PostRepositoryInterface $postRepo, TranslateInterface $tranService)
     {
         $this->postRepo = $postRepo;
+        $this->tranService = $tranService;
     }
 
     public function showAllPosts($data)
     {
-        $user = JWTAuth::user();
+        $user = Auth::user();
         $posts = $this->postRepo->showAllPosts($user, $data);
         return $posts;
     }
@@ -41,19 +44,19 @@ class PostService
         return $data;
     }
 
-    //Cách 1: Nhận form về là tạo bản dịch lưu vào db
+    public function deleteMutiPost($ids)
+    {
+        return $this->postRepo->deleteMultiPost($ids);
+    }
+
     public function createPost($data)
     {
-        $user = JWTAuth::user();
-        $language = ['vi', 'en', 'ja', 'fr'];
+        $user = Auth::user();
         $translate = [];
-        foreach ($language as $lang) {
-            $tr = new GoogleTranslate($lang);
-            $tr->setSource('vi');
-            $tr->setTarget($lang);
+        foreach (config('translate.lang') as $lang) {
             $translate[$lang] = [
-                'title' => $tr->translate($data['title']),
-                'content' => $tr->translate($data['content']),
+                'title' => $this->tranService->translate($data['title'], $lang),
+                'content' => $this->tranService->translate($data['content'], $lang),
             ];
         }
         $post = $this->postRepo->createPost([
@@ -64,12 +67,52 @@ class PostService
         return $post;
     }
 
-    public function updatePost($id, $data)
+    public function updatePost($id, $request)
     {
-        $post = $this->postRepo->updatePost($id, [
-            'title' => $data['title'],
-            'content' => $data['content'],
-        ]);
+        $translate = [];
+        foreach (config('translate.lang') as $lang) {
+            $translate[$lang] = [
+                'title' => $this->tranService->translate($request['title'], $lang),
+                'content' => $this->tranService->translate($request['content'], $lang),
+            ];
+        }
+        $data = [
+            'title' => $request['title'],
+            'content' => $request['content'],
+        ];
+        $image = Image::where('post_id', $id)->get();
+        foreach ($image as $item) {
+            if (Storage::disk('public')->exists($item->image)) {
+                Storage::disk('public')->delete($item->image);
+            }
+            $item->delete();
+        }
+        $imagePath = [];
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $item) {
+                $imagePath[] = $item->store('posts', 'public');
+            }
+        }
+        $post = $this->postRepo->updatePost($id, $data, $imagePath, $translate);
         return $post;
+    }
+
+    public function updateMultiPost($data)
+    {
+        $translate = [];
+        foreach ($data as $key) {
+            foreach (config('translate.lang') as $lang) {
+                $translate[$key['id']][$lang] = [
+                    'title' => $this->tranService->translate($key['title'], $lang),
+                    'content' => $this->tranService->translate($key['content'], $lang),
+                ];
+            }
+        }
+        return $this->postRepo->updateMultiPost($data, $translate);
+    }
+
+    public function searchPosts($title, $data)
+    {
+        return $this->postRepo->searchPosts($title, $data);
     }
 }

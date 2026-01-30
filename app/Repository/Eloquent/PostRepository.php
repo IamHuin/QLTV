@@ -2,6 +2,7 @@
 
 namespace App\Repository\Eloquent;
 
+use App\Models\Image;
 use App\Models\Post;
 use App\Models\Translate;
 use App\Repository\Contract\PostRepositoryInterface;
@@ -43,16 +44,16 @@ class PostRepository implements PostRepositoryInterface
     public function showAllPosts($user, $data)
     {
         // TODO: Implement showAllPosts() method.
-        $limit = 5;
-        $page = (int)$data['page'] ?? 1;
-        $maxPage = 20;
+        $limit = $data['limit'];
+        $page = $data['page'];
+        $maxPage = $data['maxPage'];
 
         if ($page > $maxPage) {
             return response()->json([
                 'error' => 'maxPage',
             ], 400);
         } else {
-            $lang = $data['lang'] ?? 'vi';
+            $lang = $data['lang'];
             if ($user['role_id'] == 1) {
 
                 $list_post = Translate::where('lang', $lang)->paginate($limit);
@@ -91,16 +92,17 @@ class PostRepository implements PostRepositoryInterface
     {
         // TODO: Implement deletePost() method.
         $data = Post::find($id)->delete();
+        Translate::where('post_id', $id)->delete();
         return $data;
     }
 
     public function createPost(array $data, array $translate)
     {
         $post = Post::create($data);
-        foreach ($translate as $key => $value) {
+        foreach ($translate as $lang => $value) {
             Translate::create([
                 'post_id' => $post->id,
-                'lang' => $key,
+                'lang' => $lang,
                 'title' => $value['title'],
                 'content' => $value['content'],
             ]);
@@ -108,14 +110,73 @@ class PostRepository implements PostRepositoryInterface
         return $post;
     }
 
-    public function updatePost($id, array $data)
+    public function updatePost($id, array $data, array $imagePath, array $translate)
     {
         $post = Post::find($id);
         if (isset($post)) {
-            $post->update($data);
+            $post->update([
+                'title' => $data['title'],
+                'content' => $data['content'],
+            ]);
+            foreach ($imagePath as $item) {
+                Image::create([
+                    'post_id' => $post->id,
+                    'image' => $item,
+                ]);
+            }
+            foreach ($translate as $lang => $value) {
+                Translate::where([
+                    ['post_id', $id],
+                    ['lang', $lang],
+                ])->update([
+                    'title' => $value['title'],
+                    'content' => $value['content'],
+                ]);
+            }
             return $post;
         }
         return null;
     }
 
+    public function deleteMultiPost(array $ids)
+    {
+        // TODO: Implement deleteMultiPost() method.
+        Post::whereIn('id', $ids)->delete();
+        Translate::whereIn('post_id', $ids)->delete();
+    }
+
+    public function updateMultiPost(array $data, array $translate)
+    {
+        // TODO: Implement updateMultiPost() method.
+        foreach ($data as $key) {
+            $post = Post::where('id', $key['id'])->update([
+                'title' => $key['title'],
+                'content' => $key['content'],
+            ]);
+            foreach ($translate[$key['id']] as $lang => $value) {
+                Translate::where([
+                    ['post_id', $key['id']],
+                    ['lang', $lang],
+                ])->update([
+                    'title' => $value['title'],
+                    'content' => $value['content'],
+                ]);
+            }
+        }
+
+    }
+
+    public function searchPosts($title, $data)
+    {
+        if ($data['page'] > $data['maxPage']) {
+            return response()->json([
+                'error' => 'maxPage',
+            ], 400);
+        }
+        $list_post = Post::where([
+            ['title', 'like', '%' . $title . '%'],
+        ])->pluck('id');
+        $data = Translate::whereIn('post_id', $list_post)->where('lang', $data['lang'])->paginate($data['limit']);
+        return $data;
+    }
 }

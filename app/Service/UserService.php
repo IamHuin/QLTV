@@ -3,8 +3,6 @@
 namespace App\Service;
 
 use App\Repository\Contract\UserRepositoryInterface;
-use PHPOpenSourceSaver\JWTAuth\Exceptions\JWTException;
-use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
 class UserService
 {
@@ -35,14 +33,9 @@ class UserService
 
     public function updateUser($data, $id)
     {
-        $user = JWTAuth::user();
-        if ($user['role_id'] == 1 || ($user['role_id'] == 2 && $user['id'] == $id)) {
-            $update = $this->userRepo->updateUserByUsername([
-                'password' => bcrypt($data['password']),
-            ], $id);
-            return $update;
-        }
-        return null;
+        return $this->userRepo->updateUserByUsername([
+            'password' => bcrypt($data['password']),
+        ], $id);
     }
 
     public function deleteUser($id)

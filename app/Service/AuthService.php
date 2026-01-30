@@ -3,7 +3,6 @@
 namespace App\Service;
 
 use App\Repository\Contract\AuthRepositoryInterface;
-use App\Repository\Eloquent\AuthRepository;
 
 class AuthService
 {

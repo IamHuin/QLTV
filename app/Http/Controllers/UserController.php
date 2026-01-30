@@ -34,7 +34,6 @@ class UserController extends Controller
         $this->logoutService = $logoutService;
     }
 
-    //Đăng ký
     public function register(RegisterFormRequest $request)
     {
         $data = $this->registerService->registerUser($request);
@@ -49,8 +48,6 @@ class UserController extends Controller
             'message' => __('Register unsuccessfully'),
         ], 400);
     }
-
-    //Đăng nhập
 
     public function login(LoginFormRequest $request)
     {
@@ -69,14 +66,11 @@ class UserController extends Controller
         ], 400);
     }
 
-    //Đăng xuất
     public function logout()
     {
         return $this->loginService->logoutUser();
     }
 
-
-    //Hiển thị ds thành viên
     public function index()
     {
         try {
@@ -92,11 +86,20 @@ class UserController extends Controller
             'success' => true,
             'message' => __('Show successfully'),
             'data' => UserResource::collection($show),
+            'meta' => [
+                'current_page' => $show->currentPage(),
+                'last_page' => $show->lastPage(),
+                'per_page' => $show->perPage(),
+                'to' => $show->lastPage(),
+                'total' => $show->total(),
+                'totalPages' => $show->totalPages(),
+                'next_page_url' => $show->nextPageUrl(),
+                'prev_page_url' => $show->previousPageUrl(),
+            ],
         ], 200);
 
     }
 
-    //Chi tiết thành viên
     public function show($id)
     {
         $user = $this->userService->showUser($id);
@@ -115,8 +118,7 @@ class UserController extends Controller
         }
     }
 
-    //Tìm kiếm thành viên
-    public function find(Request $request)
+    public function search(Request $request)
     {
         try {
             $this->authorize('search', User::class);
@@ -141,7 +143,6 @@ class UserController extends Controller
 
     }
 
-    //Đổi password
     public function update(UpdateFormRequest $request, $id)
     {
         $user = $this->userService->showUser($id);
@@ -162,7 +163,6 @@ class UserController extends Controller
 
     }
 
-    //Xóa thành viên
     public function destroy($id)
     {
         $user = $this->userService->showUser($id);
