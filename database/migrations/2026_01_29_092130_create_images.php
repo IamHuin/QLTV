@@ -11,16 +11,11 @@ return new class extends Migration {
     public function up(): void
     {
         if (Schema::hasTable('posts')) {
-            Schema::create('translates', function (Blueprint $table) {
+            Schema::create('images', function (Blueprint $table) {
                 $table->id();
                 $table->timestamps();
-                $table->softDeletes();
+                $table->string('image')->nullable();
                 $table->foreignId('post_id')->constrained('posts');
-                $table->string('lang');
-                $table->string('title');
-                $table->string('content');
-                $table->index(['post_id', 'lang']);
-                $table->index('lang');
             });
         }
     }
@@ -30,6 +25,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('translates');
+        Schema::dropIfExists('images');
     }
 };

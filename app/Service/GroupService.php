@@ -3,7 +3,7 @@
 namespace App\Service;
 
 use App\Repository\Contract\GroupRepositoryInterface;
-use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Auth;
 
 class GroupService
 {
@@ -51,7 +51,7 @@ class GroupService
 
     public function joinGroup($groupId)
     {
-        $user = JWTAuth::user();
+        $user = Auth::user();
         $join = $this->groupRepo->joinGroup($groupId, $user['id']);
         return $join;
     }
