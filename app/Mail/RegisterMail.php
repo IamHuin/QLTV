@@ -10,7 +10,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class NotiMail extends Mailable
+class RegisterMail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -30,7 +30,7 @@ class NotiMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Noti Mail',
+            subject: 'Register Mail',
         );
     }
 

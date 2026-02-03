@@ -29,6 +29,8 @@ class DatabaseSeeder extends Seeder
             'username' => 'admin',
             'password' => bcrypt('admin'),
             'email' => 'admin@gmail.com',
+            'otp_code' => null,
+            'otp_expires' => null,
         ]);
         $list_permission = ['manageUser', 'managePost', 'manageGroup'];
         foreach ($list_permission as $permission) {

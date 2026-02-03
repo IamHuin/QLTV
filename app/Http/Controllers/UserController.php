@@ -2,16 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\DTO\UserDTO;
-use App\Http\Requests\LoginFormRequest;
-use App\Http\Requests\RegisterFormRequest;
 use App\Http\Requests\UpdateFormRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
-use App\Service\AuthService;
-use App\Service\LoginService;
-use App\Service\LogoutService;
-use App\Service\RegisterService;
 use App\Service\UserService;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -22,53 +15,11 @@ class UserController extends Controller
 {
 
     protected $userService;
-    protected $loginService;
-    protected $registerService;
-    protected $logoutService;
 
-    public function __construct(UserService $userService, LoginService $loginService, RegisterService $registerService, LogoutService $logoutService)
+
+    public function __construct(UserService $userService)
     {
         $this->userService = $userService;
-        $this->loginService = $loginService;
-        $this->registerService = $registerService;
-        $this->logoutService = $logoutService;
-    }
-
-    public function register(RegisterFormRequest $request)
-    {
-        $data = $this->registerService->registerUser($request);
-        if (isset($data)) {
-            return response()->json([
-                'success' => true,
-                'message' => __('Register successfully'),
-            ], 201);
-        }
-        return response()->json([
-            'success' => false,
-            'message' => __('Register unsuccessfully'),
-        ], 400);
-    }
-
-    public function login(LoginFormRequest $request)
-    {
-        $data = $this->loginService->loginUser($request);
-        if (isset($data)) {
-            return response()->json([
-                'success' => true,
-                'message' => __('Login successfully'),
-                'token' => $data['token'],
-                'expiresIn' => JWTAuth::factory()->getTTL() * 60,
-            ], 200);
-        }
-        return response()->json([
-            'success' => false,
-            'message' => __('Login unsuccessfully'),
-        ], 400);
-    }
-
-    public function logout()
-    {
-        return $this->loginService->logoutUser();
     }
 
     public function index()

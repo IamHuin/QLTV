@@ -21,6 +21,9 @@ class UserFactory extends Factory
             'username' => $this->faker->unique()->userName(),
             'password' => bcrypt($this->faker->password()),
             'email' => $this->faker->unique()->safeEmail(),
+            'otp_code' => $this->faker->unique()->numberBetween(1000, 9999),
+            'otp_expires' => now(),
+            'email_verified_at' => now(),
         ];
     }
 }

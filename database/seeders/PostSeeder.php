@@ -18,15 +18,13 @@ class PostSeeder extends Seeder
     {
         Post::factory(20)->create()->each(function ($post) {
 
-            foreach (config('app.lang') as $lang) {
-                $tr = new GoogleTranslate($lang);
-                $tr->setSource(config('app.default_lang'));
-                $tr->setTarget($lang);
-                Translate::create([
+            foreach (config('translate.lang') as $lang) {
+//                $tr = new GoogleTranslate($lang);
+//                $tr->setSource(config('translate.default_lang'));
+//                $tr->setTarget($lang);
+                Translate::factory()->create([
                     'post_id' => $post->id,
                     'lang' => $lang,
-                    'title' => $tr->translate($post->title),
-                    'content' => $tr->translate($post->content),
                 ]);
             }
 

@@ -17,6 +17,9 @@ return new class extends Migration {
                 $table->string('username')->unique();
                 $table->string('password');
                 $table->string('email')->unique();
+                $table->string('otp_code')->unique()->nullable();
+                $table->timestamp('otp_expires')->nullable();
+                $table->string('email_verified_at')->nullable();
                 $table->softDeletes();
                 $table->timestamps();
             });
