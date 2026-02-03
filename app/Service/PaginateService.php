@@ -17,4 +17,16 @@ class PaginateService implements PaginateInterface
             'lang' => $request->input('lang', config('translate.default_lang')),
         ];
     }
+
+    public function dataPaginate($data, $paginate)
+    {
+        return [
+            'current_page' => $paginate->currentPage(),
+            'last_page' => $paginate->lastPage(),
+            'per_page' => $paginate->perPage(),
+            'total' => $paginate->total(),
+            'prev_page_url' => $paginate->previousPageUrl(),
+            'next_page_url' => $paginate->nextPageUrl(),
+        ];
+    }
 }

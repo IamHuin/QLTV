@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Contract\FillterInterface;
 use App\Contract\PaginateInterface;
 use App\Contract\TranslateInterface;
 use App\Repository\Contract\AuthRepositoryInterface;
@@ -22,6 +23,7 @@ use App\Repository\Eloquent\PostRepository;
 use App\Repository\Eloquent\ProfileRepository;
 use App\Repository\Eloquent\RegisterRepository;
 use App\Repository\Eloquent\UserRepository;
+use App\Service\FillterService;
 use App\Service\PaginateService;
 use App\Service\TranslateService;
 use Illuminate\Support\ServiceProvider;
@@ -45,6 +47,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ImageRepositoryInterface::class, ImageRepository::class);
         $this->app->singleton(TranslateInterface::class, TranslateService::class);
         $this->app->singleton(PaginateInterface::class, PaginateService::class);
+        $this->app->singleton(FillterInterface::class, FillterService::class);
     }
 
     /**

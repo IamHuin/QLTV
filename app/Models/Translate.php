@@ -16,5 +16,6 @@ class Translate extends Model
         'lang',
         'title',
         'content',
+        'created_at',
     ];
 }

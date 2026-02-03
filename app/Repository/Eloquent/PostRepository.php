@@ -44,27 +44,27 @@ class PostRepository implements PostRepositoryInterface
     public function showAllPosts($user, $data)
     {
         // TODO: Implement showAllPosts() method.
-        $limit = $data['limit'];
-        $page = $data['page'];
-        $maxPage = $data['maxPage'];
+        $limit = $data['paginate']['limit'];
+        $page = $data['paginate']['page'];
+        $maxPage = $data['paginate']['maxPage'];
+        $lang = $data['paginate']['lang'];
+        $key = $data['fill']['key'];
+        $filled = $data['fill']['filled'];
+
+        if ($key === 'time') {
+            $key = 'created_at';
+        }
 
         if ($page > $maxPage) {
             return response()->json([
                 'error' => 'maxPage',
             ], 400);
         } else {
-            $lang = $data['lang'];
             if ($user['role_id'] == 1) {
-
-                $list_post = Translate::where('lang', $lang)->paginate($limit);
+                $list_post = Translate::where('lang', $lang)->orderBy($key, $filled)->paginate($limit);
                 return [
                     'data' => $list_post,
-                    'current_page' => $list_post->currentPage(),
-                    'last_page' => $list_post->lastPage(),
-                    'per_page' => $list_post->perPage(),
-                    'total' => $list_post->total(),
-                    'prev_page_url' => $list_post->previousPageUrl(),
-                    'next_page_url' => $list_post->nextPageUrl(),
+                    'paginate' => $list_post,
                 ];
             }
             $list_post = Post::where('user_id', $user->id)->paginate($limit);
@@ -77,12 +77,7 @@ class PostRepository implements PostRepositoryInterface
             }
             return [
                 'data' => $show,
-                'current_page' => $list_post->currentPage(),
-                'last_page' => $list_post->lastPage(),
-                'per_page' => $list_post->perPage(),
-                'total' => $list_post->total(),
-                'prev_page_url' => $list_post->previousPageUrl(),
-                'next_page_url' => $list_post->nextPageUrl(),
+                'paginate' => $list_post,
             ];
         }
 
