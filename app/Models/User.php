@@ -30,6 +30,13 @@ class User extends Authenticatable implements JWTSubject
         'delete_at'
     ];
 
+    protected $hidden = [
+        'password',
+        'otp_code',
+        'otp_expires',
+        'email_verified_at',
+    ];
+
     public static function roleResole($role_id)
     {
         $role = [

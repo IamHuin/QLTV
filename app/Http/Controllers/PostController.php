@@ -13,6 +13,7 @@ use App\Service\PaginateService;
 use App\Service\PostService;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
+use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
 
 class PostController extends Controller
