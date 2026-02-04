@@ -7,6 +7,7 @@ use App\Http\Requests\PostFormRequest;
 use App\Http\Resources\PostResource;
 use App\Http\Resources\TranslateResource;
 use App\Models\Post;
+use App\Service\FillterService;
 use App\Service\ImageService;
 use App\Service\PaginateService;
 use App\Service\PostService;
@@ -20,17 +21,24 @@ class PostController extends Controller
     protected $postService;
     protected $imgService;
     protected $paginateService;
+    protected $fillService;
 
-    public function __construct(PostService $postService, ImageService $imgService, PaginateService $paginateService)
+    public function __construct(PostService $postService, ImageService $imgService, PaginateService $paginateService, FillterService $fillService)
     {
         $this->postService = $postService;
         $this->imgService = $imgService;
         $this->paginateService = $paginateService;
+        $this->fillService = $fillService;
     }
 
     public function index(Request $request)
     {
-        $data = $this->paginateService->paginate($request);
+        $paginate = $this->paginateService->paginate($request);
+        $fill = $this->fillService->fill($request);
+        $data = [
+            'paginate' => $paginate,
+            'fill' => $fill,
+        ];
         try {
             $this->authorize('viewAny', Post::class);
         } catch (AuthorizationException $e) {
@@ -40,18 +48,12 @@ class PostController extends Controller
             ], 403);
         }
         $post = $this->postService->showAllPosts($data);
+        $dataPagination = $this->paginateService->dataPaginate($post['data'], $post['paginate']);
         return response()->json([
             'success' => true,
             'message' => __('Show successfully'),
             'data' => TranslateResource::collection($post['data']),
-            'meta' => [
-                'current_page' => $post['current_page'],
-                'last_page' => $post['last_page'],
-                'per_page' => $post['per_page'],
-                'total' => $post['total'],
-                'prev_page_url' => $post['prev_page_url'],
-                'next_page_url' => $post['next_page_url'],
-            ],
+            'meta' => $dataPagination,
         ], 200);
     }
 

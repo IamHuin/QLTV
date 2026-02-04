@@ -2,27 +2,24 @@
 
 namespace App\Service;
 
-use App\Repository\Contract\AuthRepositoryInterface;
+use App\Repository\Contract\LoginRepositoryInterface;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
 class LoginService
 {
-    protected $authRepo;
+    protected $loginRepo;
 
-    public function __construct(AuthRepositoryInterface $authRepo)
+    public function __construct(LoginRepositoryInterface $loginRepo)
     {
-        $this->authRepo = $authRepo;
+        $this->loginRepo = $loginRepo;
     }
 
     public function loginUser($data)
     {
-        $login = $this->authRepo->login($data['username']);
-        if (!$token = JWTAuth::attempt(['username' => $data['username'], 'password' => $data['password']])) {
-            return response()->json(['error' => 'invalid_credentials'], 401);
+        $user = $this->loginRepo->login($data);
+        if (empty($user) || !$token = JWTAuth::attempt(['username' => $data['username'], 'password' => $data['password']])) {
+            return null;
         }
-        return [
-            'token' => $token,
-            'login' => $login,
-        ];
+        return ['data' => $user, 'token' => $token];
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Repository\Contract\AuthRepositoryInterface;
+use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
 class AuthService
 {
@@ -16,5 +17,12 @@ class AuthService
     public function rolePermission($data)
     {
         return $this->authRepo->rolePermission($data);
+    }
+
+    public function refreshToken()
+    {
+        $token = JWTAuth::getToken();
+        $new_token = JWTAuth::setToken($token)->refresh();
+        return $new_token;
     }
 }

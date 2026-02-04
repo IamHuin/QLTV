@@ -8,9 +8,12 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\LoginController;
 
-Route::post('register', [UserController::class, 'register'])->name('api.register');
-Route::post('login', [UserController::class, 'login'])->name('api.login');
+Route::post('register', [RegisterController::class, 'register'])->name('api.register');
+Route::post('login', [LoginController::class, 'login'])->name('api.login');
+Route::post('register/verify', [RegisterController::class, 'verify'])->name('api.register.verify');
 
 Route::middleware('auth:api')->group(function () {
     Route::middleware('role:1')->group(function () {
@@ -33,8 +36,9 @@ Route::middleware('auth:api')->group(function () {
         //Post
         Route::get('post/search', [PostController::class, 'search'])->name('post.search');
     });
-    Route::post('logout', [UserController::class, 'logout'])->name('api.logout');
+    Route::post('logout', [LoginController::class, 'logout'])->name('api.logout');
     //User
+    Route::get('auth', [AuthController::class, 'refresh'])->name('api.refresh');
     Route::middleware('permission:manageUser')->group(function () {
         Route::get('user/{id}', [UserController::class, 'show'])->name('user.show');
         Route::patch('user/{id}', [UserController::class, 'update'])->name('user.update');

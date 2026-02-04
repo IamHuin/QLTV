@@ -19,5 +19,7 @@
     "Format is invalid.": "Format is invalid.",
     "Mail successfully sent": "Mail successfully sent",
     "Mail unsuccessfully sent": "Mail unsuccessfully sent",
-    "Invalid": "Invalid"
+    "Invalid": "Invalid",
+    "Verify unsuccessfully": "Verify unsuccessfully",
+    "Verify successfully": "Verify successfully"
 }

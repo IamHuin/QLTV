@@ -10,7 +10,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class NotiMail extends Mailable
+class OTPRegisterMail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -30,7 +30,7 @@ class NotiMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Noti Mail',
+            subject: 'Verify Register Mail',
         );
     }
 
@@ -40,7 +40,7 @@ class NotiMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'notiMail',
+            view: 'verifyRegister',
             with: [
                 'user' => $this->user,
             ]

@@ -19,5 +19,7 @@
     "Format is invalid.": "Định dạng không hợp lệ",
     "Mail successfully sent": "Gửi Mail thành công",
     "Mail unsuccessfully sent": "Gửi Mail không thành công",
-    "Invalid": "Không hợp lệ"
+    "Invalid": "Không hợp lệ",
+    "Verify unsuccessfully": "Xác thực không thành công",
+    "Verify successfully": "Xác thực thành công"
 }

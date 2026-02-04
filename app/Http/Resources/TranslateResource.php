@@ -21,6 +21,7 @@ class TranslateResource extends JsonResource
             'title' => $this->title,
             'content' => $this->content,
             'images' => Image::imagePath($this->post_id),
+            'created_at' => date($this->created_at)
         ];
     }
 }

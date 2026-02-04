@@ -28,4 +28,13 @@ class AuthController extends Controller
             'message' => __('Unauthorized'),
         ], 403);
     }
+
+    public function refresh()
+    {
+        $token = $this->authService->refreshToken();
+        return response()->json([
+            'success' => true,
+            'token' => $token,
+        ]);
+    }
 }
