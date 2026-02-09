@@ -49,7 +49,7 @@ class PostController extends Controller
             ], 403);
         }
         $post = $this->postService->showAllPosts($data);
-        $dataPagination = $this->paginateService->dataPaginate($post['data'], $post['paginate']);
+        $dataPagination = $this->paginateService->dataPaginate($post['paginate']);
         return response()->json([
             'success' => true,
             'message' => __('Show successfully'),

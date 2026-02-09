@@ -10,10 +10,9 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        if (Schema::hasTable('roles')) {
+        if (!Schema::hasTable('users')) {
             Schema::create('users', function (Blueprint $table) {
                 $table->id();
-                $table->foreignId('role_id')->constrained('roles');
                 $table->string('username')->unique();
                 $table->string('password');
                 $table->string('email')->unique();

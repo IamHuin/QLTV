@@ -2,10 +2,12 @@
 
 namespace App\Providers;
 
+use App\Models\Department;
 use App\Models\Group;
 use App\Models\Post;
 use App\Models\Profile;
 use App\Models\User;
+use App\Policies\DepartmentPolicy;
 use App\Policies\GroupPolicy;
 use App\Policies\PostPolicy;
 use App\Policies\ProfilePolicy;
@@ -19,6 +21,7 @@ class AuthServiceProvider extends ServiceProvider
         Profile::class => ProfilePolicy::class,
         Post::class => PostPolicy::class,
         Group::class => GroupPolicy::class,
+        Department::class => DepartmentPolicy::class,
     ];
     /**
      * Register services.

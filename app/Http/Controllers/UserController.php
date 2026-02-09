@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UpdateFormRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use App\Service\PaginateService;
 use App\Service\UserService;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -15,15 +16,21 @@ class UserController extends Controller
 {
 
     protected $userService;
+    protected $paginateService;
 
 
-    public function __construct(UserService $userService)
+    public function __construct(UserService $userService, PaginateService $paginateService)
     {
         $this->userService = $userService;
+        $this->paginateService = $paginateService;
     }
 
-    public function index()
+    public function index(Request $request)
     {
+        $paginate = $this->paginateService->paginate($request);
+        $data = [
+            'paginate' => $paginate,
+        ];
         try {
             $this->authorize('viewAny', User::class);
         } catch (AuthorizationException $e) {
@@ -32,21 +39,13 @@ class UserController extends Controller
                 'message' => $e->getMessage()
             ], 403);
         }
-        $show = $this->userService->showAllUser();
+        $show = $this->userService->showAllUser($data);
+        $dataPaginate = $this->paginateService->dataPaginate($show['paginate']);
         return response()->json([
             'success' => true,
             'message' => __('Show successfully'),
-            'data' => UserResource::collection($show),
-            'meta' => [
-                'current_page' => $show->currentPage(),
-                'last_page' => $show->lastPage(),
-                'per_page' => $show->perPage(),
-                'to' => $show->lastPage(),
-                'total' => $show->total(),
-                'totalPages' => $show->totalPages(),
-                'next_page_url' => $show->nextPageUrl(),
-                'prev_page_url' => $show->previousPageUrl(),
-            ],
+            'data' => UserResource::collection($show['data']),
+            'meta' => $dataPaginate,
         ], 200);
 
     }
@@ -71,6 +70,10 @@ class UserController extends Controller
 
     public function search(Request $request)
     {
+        $paginate = $this->paginateService->paginate($request);
+        $data = [
+            'paginate' => $paginate,
+        ];
         try {
             $this->authorize('search', User::class);
         } catch (AuthorizationException $e) {
@@ -79,12 +82,14 @@ class UserController extends Controller
                 'message' => $e->getMessage()
             ], 403);
         }
-        $show = $this->userService->searchUser($request['username']);
+        $show = $this->userService->searchUser($data, $request['search']);
+        $dataPaginate = $this->paginateService->dataPaginate($show['paginate']);
         if (isset($show)) {
             return response()->json([
                 'success' => true,
                 'message' => __('Show successfully'),
-                'data' => new UserResource($show),
+                'data' => UserResource::collection($show['data']),
+                'meta' => $dataPaginate,
             ], 200);
         }
         return response()->json([

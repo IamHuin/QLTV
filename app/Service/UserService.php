@@ -19,15 +19,15 @@ class UserService
         return $data;
     }
 
-    public function showAllUser()
+    public function showAllUser($data)
     {
-        $data = $this->userRepo->showAllUsers();
-        return $data;
+        $dataShow = $this->userRepo->showAllUsers($data);
+        return $dataShow;
     }
 
-    public function searchUser($username)
+    public function searchUser($data, $search)
     {
-        $user = $this->userRepo->getUserByUsername($username);
+        $user = $this->userRepo->searchUser($data, $search);
         return $user;
     }
 

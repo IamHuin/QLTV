@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Log;
 
 class RoleMiddleware
 {
@@ -16,7 +17,7 @@ class RoleMiddleware
     public function handle(Request $request, Closure $next, $role): Response
     {
         $user = $request->user();
-        if (!($user->role_id == $role)) {
+        if (!$user->hasRole($user, $role)) {
             return response([
                 'success' => false,
                 'message' => __('Unauthorized'),

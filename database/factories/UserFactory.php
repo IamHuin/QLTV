@@ -17,12 +17,11 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'role_id' => 2,
             'username' => $this->faker->unique()->userName(),
             'password' => bcrypt($this->faker->password()),
             'email' => $this->faker->unique()->safeEmail(),
-            'otp_code' => $this->faker->unique()->numberBetween(1000, 9999),
-            'otp_expires' => now(),
+            'otp_code' => null,
+            'otp_expires' => null,
             'email_verified_at' => now(),
         ];
     }

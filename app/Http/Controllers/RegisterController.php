@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\RegisterEvent;
 use App\Http\Requests\RegisterFormRequest;
 use App\Service\RegisterService;
 use Illuminate\Http\Request;

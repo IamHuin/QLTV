@@ -20,7 +20,6 @@ class User extends Authenticatable implements JWTSubject
 
     protected $fillable = [
         'id',
-        'role_id',
         'username',
         'password',
         'email',
@@ -35,6 +34,7 @@ class User extends Authenticatable implements JWTSubject
         'otp_code',
         'otp_expires',
         'email_verified_at',
+        'delete_at'
     ];
 
     public static function roleResole($role_id)
@@ -42,8 +42,25 @@ class User extends Authenticatable implements JWTSubject
         $role = [
             1 => 'admin',
             2 => 'user',
+            3 => 'pm',
         ];
         return $role[$role_id] ?? 'user';
+    }
+
+    public function role()
+    {
+        $user_id = $this->id;
+        return UserRoleDepartment::where('user_id', $user_id)->first()->role_id;
+    }
+
+    public function hasRole($user, $role)
+    {
+        $role_id = Role::where('name', $role)->first()->id;
+        $user_id = $user->id;
+        return UserRoleDepartment::where([
+            'user_id' => $user_id,
+            'role_id' => $role_id
+        ])->exists();
     }
 
     public function hasPermission($permission)
@@ -52,7 +69,8 @@ class User extends Authenticatable implements JWTSubject
         if (!$check) {
             return false;
         }
-        return RolePermission::where('role_id', $this->role_id)
+        $role_id = $this->role();
+        return RolePermission::where('role_id', $role_id)
             ->where('permission_id', $check->id)
             ->exists();
     }
