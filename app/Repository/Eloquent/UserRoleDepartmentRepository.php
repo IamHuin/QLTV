@@ -94,18 +94,58 @@ class UserRoleDepartmentRepository implements UserRoleDepartmentRepositoryInterf
                 'error' => 'maxPage',
             ], 400);
         }
-        $user_id = Auth::user()->id;
-        $role_id = UserRoleDepartment::where('user_id', $user_id)->pluck('role_id')->toArray();
-        dd($role_id);
+        $user = Auth::user();
+        $role = Role::find($user->role())->name;
+        if ($role == 'admin') {
+            $show = UserRoleDepartment::whereNotNull('department_id')->paginate($limit);
+            return [
+                'data' => $show,
+                'paginate' => $show,
+            ];
+        }
+        $department_id = UserRoleDepartment::where([
+            'user_id' => $user->id,
+            'role_id' => $user->role(),
+        ])->first()->department_id;
+        $show = UserRoleDepartment::where('department_id', $department_id)->paginate($limit);
+        return [
+            'data' => $show,
+            'paginate' => $show,
+        ];
     }
 
     public function updateUserRoleDepartment($data)
     {
         // TODO: Implement updateUserRoleDepartment() method.
+        $user = Auth::user();
+        $role = Role::find($user->role())->name;
+        if ($role == 'admin') {
+
+        }
+
     }
 
     public function destroyUserRoleDepartment($data)
     {
         // TODO: Implement destroyUserRoleDepartment() method.
+        $user = Auth::user();
+        $role = Role::find($user->role())?->name;
+        if ($role === 'admin') {
+            return UserRoleDepartment::find($data)?->delete();
+        } else if ($role === 'pm') {
+            $department_id = UserRoleDepartment::where([
+                'user_id' => $user->id,
+                'role_id' => $user->role(),
+            ])->first()->department_id;
+            $listId = UserRoleDepartment::where('department_id', $department_id)->pluck('id')->toArray();
+            $exId = in_array($data, $listId);
+            if ($exId) {
+                $exData = UserRoleDepartment::where('id', $data)->first()->role_id;
+                if ($exData != $user->role()) {
+                    return UserRoleDepartment::find($data)?->delete();
+                }
+            }
+        }
+        return null;
     }
 }

@@ -22,4 +22,9 @@ class UserRoleDepartmentService
     {
         return $this->urdRepo->showUserRoleDepartment($data);
     }
+
+    public function destroyURD($data)
+    {
+        return $this->urdRepo->destroyUserRoleDepartment($data);
+    }
 }

@@ -17,9 +17,9 @@ class URDResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $user = User::firstWhere('id', $this->user_id)->name;
+        $user = User::firstWhere('id', $this->user_id)->username;
         $role = Role::firstWhere('id', $this->role_id)->name;
-        $department = Department::firstWhere('id', $this->department_id)->name;
+        $department = Department::firstWhere('id', $this->department_id);
         return [
             'user' => $user,
             'role' => $role,

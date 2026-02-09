@@ -49,6 +49,7 @@ Route::middleware('auth:api')->group(function () {
     });
     Route::middleware('permission:manageURD')->group(function () {
         Route::get('urd', [UserRoleDepartmentController::class, 'index'])->name('urd.index');
+        Route::delete('urd/{id}', [UserRoleDepartmentController::class, 'destroy'])->name('urd.destroy');
     });
     Route::post('logout', [LoginController::class, 'logout'])->name('api.logout');
     //User

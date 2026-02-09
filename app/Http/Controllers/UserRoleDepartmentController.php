@@ -31,7 +31,7 @@ class UserRoleDepartmentController extends Controller
             'message' => __('Show Successfully'),
             'data' => URDResource::collection($show['data']),
             'meta' => $dataPaginate,
-        ]);
+        ], 200);
     }
 
     public function store(Request $request)
@@ -41,11 +41,26 @@ class UserRoleDepartmentController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => __('Create unsuccessfully'),
-            ]);
+            ], 404);
         }
         return response()->json([
             'success' => true,
             'message' => __('Create successfully'),
+        ], 201);
+    }
+
+    public function destroy($id)
+    {
+        $data = $this->urdService->destroyURD($id);
+        if (!empty($data)) {
+            return response()->json([
+                'success' => true,
+                'message' => __('Delete Successfully'),
+            ], 204);
+        }
+        return response()->json([
+            'success' => false,
+            'message' => __('Delete Unsuccessfully'),
         ]);
     }
 }
