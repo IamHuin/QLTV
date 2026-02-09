@@ -4,9 +4,9 @@ namespace App\Repository\Contract;
 
 interface UserRepositoryInterface
 {
-    public function getUserByUsername(string $username);
+    public function searchUser($data, $search);
 
-    public function showAllUsers();
+    public function showAllUsers($data);
 
     public function updateUserByUsername(array $data, $id);
 

@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\UserRoleDepartmentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PostController;
@@ -16,7 +18,7 @@ Route::post('login', [LoginController::class, 'login'])->name('api.login');
 Route::post('register/verify', [RegisterController::class, 'verify'])->name('api.register.verify');
 
 Route::middleware('auth:api')->group(function () {
-    Route::middleware('role:1')->group(function () {
+    Route::middleware('role:admin')->group(function () {
         //User
         Route::get('user', [UserController::class, 'index'])->name('user.index');
         Route::get('user/search', [UserController::class, 'search'])->name('user.search');
@@ -35,6 +37,18 @@ Route::middleware('auth:api')->group(function () {
         Route::get('mail', [MailController::class, 'sendMail'])->name('mail.sendMail');
         //Post
         Route::get('post/search', [PostController::class, 'search'])->name('post.search');
+        //Department
+        Route::get('department', [DepartmentController::class, 'index'])->name('department.index');
+        Route::get('department/search', [DepartmentController::class, 'search'])->name('department.search');
+        Route::get('department/{id}', [DepartmentController::class, 'show'])->name('department.show');
+        Route::delete('department/{id}', [DepartmentController::class, 'destroy'])->name('department.destroy');
+        Route::patch('department/{id}', [DepartmentController::class, 'update'])->name('department.update');
+        Route::post('department', [DepartmentController::class, 'store'])->name('department.store');
+        //URD
+        Route::post('urd', [UserRoleDepartmentController::class, 'store'])->name('urd.store');
+    });
+    Route::middleware('permission:manageURD')->group(function () {
+        Route::get('urd', [UserRoleDepartmentController::class, 'index'])->name('urd.index');
     });
     Route::post('logout', [LoginController::class, 'logout'])->name('api.logout');
     //User
@@ -44,7 +58,7 @@ Route::middleware('auth:api')->group(function () {
         Route::patch('user/{id}', [UserController::class, 'update'])->name('user.update');
     });
 
-    Route::middleware('role:2')->group(function () {
+    Route::middleware('role:user')->group(function () {
         Route::get('profile/{id}', [ProfileController::class, 'show'])->name('profile.show');
         Route::patch('profile/{id}', [ProfileController::class, 'update'])->name('profile.update');
         Route::post('group/{id}', [GroupController::class, 'join'])->name('group.join');

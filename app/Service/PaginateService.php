@@ -18,7 +18,7 @@ class PaginateService implements PaginateInterface
         ];
     }
 
-    public function dataPaginate($data, $paginate)
+    public function dataPaginate($paginate)
     {
         return [
             'current_page' => $paginate->currentPage(),

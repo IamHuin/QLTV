@@ -9,14 +9,22 @@ use App\Repository\Contract\UserRepositoryInterface;
 class UserRepository implements UserRepositoryInterface
 {
 
-    public function getUserByUsername(string $username)
+    public function searchUser($data, $search)
     {
-        // TODO: Implement getUserByUsername() method.
-        $user = User::where('username', $username)->first();
-        if (isset($user)) {
-            return $user;
+        // TODO: Implement searchUser() method.
+        $limit = $data['paginate']['limit'];
+        $page = $data['paginate']['page'];
+        $maxPage = $data['paginate']['maxPage'];
+        if ($page > $maxPage) {
+            return response()->json([
+                'error' => 'maxPage',
+            ], 400);
         }
-        return null;
+        $user = User::where('username', 'like', '%' . $search . '%')->paginate($limit);
+        return [
+            'data' => $user,
+            'paginate' => $user
+        ];
     }
 
     public function updateUserByUsername(array $data, $id)
@@ -37,13 +45,25 @@ class UserRepository implements UserRepositoryInterface
         return $delete;
     }
 
-    public function showAllUsers()
+    public function showAllUsers($data)
     {
         // TODO: Implement showAllUsers() method.
-        $users = User::where([
-            ['role_id', 2],
-        ])->paginate(20);
-        return $users;
+        $limit = $data['paginate']['limit'];
+        $page = $data['paginate']['page'];
+        $maxPage = $data['paginate']['maxPage'];
+
+        if ($page > $maxPage) {
+            return response()->json([
+                'error' => 'maxPage',
+            ], 400);
+        }
+        $user = User::where([
+            ['username', '!=', 'admin'],
+        ])->paginate($limit);
+        return [
+            'data' => $user,
+            'paginate' => $user
+        ];
     }
 
     public function showUser($id)

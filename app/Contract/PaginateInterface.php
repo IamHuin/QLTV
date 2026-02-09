@@ -6,5 +6,5 @@ interface PaginateInterface
 {
     public function paginate($request);
 
-    public function dataPaginate($data, $paginate);
+    public function dataPaginate($paginate);
 }
